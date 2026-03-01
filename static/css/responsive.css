@@ -1,0 +1,182 @@
+
+@media screen and (max-width: 668px) {
+  :root {
+    --color-btn: #145bc8;
+    --color-btn-2: #27a4f8;
+    --color-blackground: #121345;
+    --color-eaf: #EAF;
+    --color-viomes: #C20CF0;
+    --color-secondary: #008080;
+    --color-white: #ffffff;
+    --color-deno: #020340;
+    --color-text: #fff5ee;
+    --color-text-2: #c0c0c0;
+    --color-pups:#800080;
+  }
+  * {
+    box-sizing: border-box;
+    font-family: "Ovo", serif;
+  }
+  body {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    font-family: "Montserrat", Arial, sans-serif;
+  }
+  .header {
+    background-color: var(--color-blackground);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 15px;
+    max-height: 80px;
+    left: 0;
+    top: 0;
+  }
+  .myLogo {
+    display: flex;
+    align-items: center;
+    gap: 2%;
+    text-decoration: none;
+  }
+  .myLogo img {
+    object-fit: cover;
+  }
+  .myLogo span {
+    padding-left: 2px;
+    font-size: 20px;
+    font-weight: 600;
+    color: transparent;
+    -webkit-text-stroke: 2.5ps var(--color-btn);
+  }
+  /** SIGNUP AND LOGIN SECTION **/
+  .signup-container {
+    margin-top: 15%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .signup-form-container, .login-form-container {
+    margin-top: 15%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .form-headings {
+    padding-top: 25%;
+    margin-bottom: 5px;
+  }
+  .messages li {
+    color: #ff0000;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .form-div {
+    margin-left: -2% !important;
+    width: 500px;
+    margin-top: -2%;
+  }
+  .signup-form {
+    padding: 0px 20px;
+  }
+  .form-control {
+    margin-top: 3%;
+    margin-bottom: 4%;
+    line-height: 2;
+  }
+  .label-control {
+    margin-bottom: 6px;
+    line-height: 2;
+  }
+  .login-sos {
+    margin-left: -10%;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (max-width: 968px) {
+   .header {
+    background-color: var(--color-blackground);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 15px;
+    max-height: 80px;
+    left: 0;
+    top: 0;
+  }
+  .myLogo {
+    display: flex;
+    align-items: center;
+    gap: 2%;
+    text-decoration: none;
+  }
+  .myLogo img {
+    object-fit: cover;
+  }
+  .myLogo span {
+    padding-left: 2px;
+    font-size: 20px;
+    font-weight: 600;
+    color: transparent;
+    -webkit-text-stroke: 2.5ps var(--color-btn);
+  }
+  /** SIGNUP AND LOGIN SECTION **/
+  .signup-container {
+    margin-top: 15%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .signup-form-container, .login-form-container {
+    margin-top: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .form-headings {
+    padding-top: 25%;
+    margin-bottom: 5px;
+  }
+  .messages li {
+    color: #ff0000;
+    font-size: 16px;
+    font-weight: 600;
+  }
+ .form-div {
+    margin-left: -2% !important;
+    width: 600px;
+    margin-top: -2%;
+  }
+    /*.signup-form {
+    padding: 0px 20px;
+    width: 500px;
+  } */
+  .form-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .label-control {
+    margin-bottom: 6px;
+    line-height: 2;
+  }
+  .login-sos {
+    margin-left: -10%;
+  }
+}

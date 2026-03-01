@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="{% static 'images/favicon3.ico' %}" type="image/x-icon">
+  <title>Marsbro Mars{% block title %} | Register Page {% endblock title %}</title>
+  
+  <link rel="stylesheet" href="{% static '/css/responsive.css' %}">
+  <link rel="stylesheet" href="{% static '/css/index.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Ovo&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+ 
+</head>
+<body>
+  <header class="header">
+    <a href="" class="myLogo">
+      <img src="{% static '/images/favicon3.ico' %}" alt="">
+      <span>MarsBro</span>
+    </a>
+    <div class="logout">
+      <a href="{% url 'logout' %}">Logout</a>
+    </div>
+  </header>
+  <div class="signup-container">
+    <div class="signup-form-container">
+      <strong class="form-headings">Please, fill in the information acurately</strong>
+      <div class="form-sub-headings">
+        <p>
+          {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            </ul>
+          {% endif %}
+        </p>
+      </div>
+    </div>
+
+    <div class="form-div">
+      <strong>Register Here</strong>
+      <form action="" method="POST" class="signup-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-contents">
+          
+          <div class="form-control">
+            <label for="profile" class="label-control">Profile Image:</label>
+             <div class="profile">
+               {{ form.profile_picture }}
+             </div>
+          </div>
+          
+          <div class="form-control">
+            <span>
+              <label for="first_name" class="label-control">First Name:</label>
+              {{ form.first_name }}
+            </span>
+            <span>
+              <label for="last_name" class="label-control">Last Name:</label>
+              {{ form.last_name }}
+            </span>
+          </div>
+          
+          <div class="form-control">
+            <span>
+              <label for="username" class="label-control">Username:</label>
+              {{ form.username }}
+            </span>
+
+            <span>
+              <label for="email" class="label-control">Email ID:</label>
+              {{ form.email }}
+            </span>
+          </div>
+          
+          <div class="form-control">
+            <span>
+              <label for="password1" class="label-control">Password:</label>
+              {{ form.password1 }}
+            </span>
+
+            <span>
+              <label for="password2" class="label-control">Confirm Password:</label>
+              {{ form.password2 }}
+            </span>
+          </div>
+          
+          <div class="signup-form-control">
+            <p class="login-text">Have an account?  <a href="{% url 'login' %}" class="login-link">Login</a></p>
+            <a href="{% url 'password_reset' %}" class="forgot-password-link">Forgot Password?</a>
+          </div>
+
+          <div class="term-form-control">
+            <p>By Clicking on submit you have agreed to  <a href="">Terms and Conditions of our service</a> and  <a href="">Privacy Policy</a></p>
+          </div> 
+          
+          
+          <button type="submit" class="signup-btn">Submit</button>
+
+          <div class="">
+            <strong class="or-text">Or</strong>
+          </div>
+          
+          <div class="social-login">
+            <p>Signup with Social account:</p>
+            <div class="login-sos">
+              <a href="" class="social-links">
+                <img class="signup-img" src="{% static '/images/google2.png' %}" alt="">
+              </a>
+              <a href="" class="social-links">
+                <img class="signup-img" src="{% static '/images/github.jpg' %}" alt="">
+              </a>
+            </div>
+          </div>
+        </div>
+      </form> 
+    </div>
+  </div>
+  <script src="{% static 'script/app.js' %}"></script>
+  <script src="{% static 'script/script.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.0/dist/boxicons.js" integrity="sha512-Dm5UxqUSgNd93XG7eseoOrScyM1BVs65GrwmavP0D0DujOA8mjiBfyj71wmI2VQZKnnZQsSWWsxDKNiQIqk8sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+</body>
+</html>
+
+

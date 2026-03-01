@@ -1,0 +1,66 @@
+from django.urls import path
+from . import views
+
+
+urlpatterns = [
+  path(
+    '',
+    views.home,
+    name='home'
+  ),
+  path(
+    'about', 
+    views.about, 
+    name='about'
+  ),
+  path(
+    'blogs', 
+    views.blogs, 
+    name='blogs'
+  ),
+  path(
+    'contact', 
+    views.contact, 
+    name='contact'
+  ),
+  path(
+    'register', 
+    views.registerView, 
+    name='register'
+  ),
+  path(
+    'login/', 
+    views.loginView, 
+    name='login'
+  ),
+  path(
+    'logout/', 
+    views.logout_view, 
+    name='logout'
+  ),
+  path(
+    'password_reset/',
+    views.passwordResetView,
+    name='password_reset'
+  ),
+  path(
+    'password_reset/done/',
+    views.passwordResetDoneView,
+    name='password_reset_done'
+  ),
+  path(
+    'reset/<uidb64>/<token>/',
+    views.passwordResetConfirmView,
+    name='password_reset_confirm'
+  ),
+  path(
+    'reset/done/',
+    views.passwordResetCompleteView,
+    name='password_reset_complete'
+  ),
+  path(
+    'screens/', 
+    views.screens, 
+    name='homeScreens'
+  ),
+]

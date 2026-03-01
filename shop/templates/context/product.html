@@ -1,0 +1,80 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %} | Shopping Page {% endblock title %}
+
+{% block content %}
+   <div class="product-container">
+      <div class="product-headings">
+         <strong class="prod-headings">Lorem ipsum dolor sit amet consectetur.</strong>
+         <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde aliquid iusto saepe ipsa maiores nemo sint nobis incidunt recusandae dolorum, doloremque laborum, est dolore ea.</p>
+      </div>
+
+      <div class="select-products">
+         <select name="" id="" class="cat">
+            <option value="">Select</option>
+            <option value="" id="">Male</option>
+            <option value="" id="">Female</option>
+         </select>
+
+         <select name="" id="" class="cat">
+            <option value="">Categories</option>
+            <option value="">Pants</option>
+            <option value="">Boxers</option>
+            <option value="">Singlets</option>
+            <option value="">Bra</option>
+            <option value="">skirts</option>
+            <option value="">Gadigans</option>
+         </select>
+
+         <select name="" id="" class="cat">
+            <option value="">Colors</option>
+            <option value="">Black</option>
+            <option value="">Red</option>
+            <option value="">Blue</option>
+            <option value="">Green</option>
+            <option value="">Pink</option>
+            <option value="">Purple</option>
+            <option value="">Orange</option>
+            <option value="">Lime</option>
+            <option value="">White</option>
+         </select>
+      </div>
+
+      <div class="prod-female">
+         <a href="{% url 'female_wears' %}">Female Wears</a>
+      </div>
+
+      <div class="products-list">
+         <div class="prod-bg"></div>
+
+         <div class="prod-views">
+            {% for product in products %}
+              <div class="prod-conn">
+                <a href="">
+                  <img src="{{ product.product_image.url }}" alt="{{ product.name }}">
+                </a>
+
+                <h3 class="prod-title">Name: {{ product.name }}</h3>
+
+                <h4 class="">Price: ${{  product.price }}</h4>
+
+                <h4 class="">Stock: {{ product.stock }}</h4>
+
+                <p class="">Description: {{ product.desc }}</p>
+              </div>
+            {% endfor %}
+         </div>
+      </div>
+      
+      
+
+      <a href="{% url 'home' %}">Home</a>
+
+      this shop will contains:
+      1. Men undies such as Nickkers and Pants
+      2. Women undies such as bra, pants, skin-tight, and skirts
+
+    </div>
+{% endblock content %}

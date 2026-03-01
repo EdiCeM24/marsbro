@@ -1,0 +1,74 @@
+{% extends 'main/base.html' %}
+
+{% block title %} | Home Page {% endblock title %}
+
+{% block content %}
+<div class="header-content">
+    <div class="home-page-text-heading">
+      <h1 class="heading">Welcome to MarsBro</h1>
+      <span>A home of varieties for your quest</span>
+    </div>
+    <p>Questions and Answers are what we are expecting in our lives to assist us easily achieve the purpose in which we have been worried about, therefore, do well to find out the best for your search.</p>
+  
+  <div class="video-tutorials">
+    <i class="fa-slab-press fa-regular fa-tv"></i>
+     <a href="{% url 'homeScreens' %}" class="video-link">Video Tutorial <i class="fa-slab-press fa-regular fa-angle-right"></i></a>
+  </div>
+</div>
+
+<div class="directive-text">
+   <strong>Click on each of the topics to read on...</strong>
+</div>
+
+
+  <div class="container mx-auto">
+    <div class="headings">
+      <span class="topics-numbers">Topics: <strong id="increaseFigure">{{ total_count }}</strong></span>
+      <span class="">Subjects: <strong id="increaseFigures">{{ total_count }}</strong></span>
+    </div>
+    <hr>
+    <div class="content">
+      {% for product in products %}
+        <span class="content-list">
+          <table>
+            <tbody>
+              <tr class="table-row">
+                <td>
+                  <a href="{% url 'blogs' %}" class="topics-text text-xl font-semibold font-serif">{{ product.topic }}</a>
+                </td>
+                <div class="table-border">
+                  <td class="maintext-1">
+                    <p class="main-text">{{ product.text }}</p>
+                  </td>
+                </div>
+              </tr>
+            </tbody>
+          </table>
+        </span>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="contents-middle">
+    <div class="contents-container">
+      <div class="left-side">
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+          Quis iure illo nisi ullam qui laudantium, porro adipisci fuga, 
+          quidem repellat id laboriosam expedita dignissimos nostrum, 
+          recusandae aspernatur facere officia esse.
+        </p>
+      </div>
+
+      <div class="right-side">
+        <strong>Contact us:</strong>
+        <div class="social-accounts">
+          <a href="" class="">fb</a>
+          <a href="" class="">inst</a>
+          <a href="" class="">whatsapp</a>
+          <a href="" class="">X</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% load compress %}
+{% load static %}
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="{% static 'images/favicon3.ico' %}" type="image/x-icon">
+  <title>Marsbro mars{% block title %} {% endblock title %}</title>
+  {% compress css %}
+    <link type="text/x-scss" href="{% static 'scss/main.scss' %}" rel="stylesheet" media="screen">
+  {% endcompress %}
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Ovo&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+ 
+</head>
+<body>
+  <nvbar class="nav">
+    {% include 'includes/header.html' %}
+  </nvbar>
+  {% block content %}
+
+  {% endblock content %}
+
+  <footer class="nav">
+    {% include 'includes/footer.html' %}
+  </footer>
+
+  <script src="{% static 'script/app.js' %}"></script>
+  <script src="{% static 'script/script.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.0/dist/boxicons.js" integrity="sha512-Dm5UxqUSgNd93XG7eseoOrScyM1BVs65GrwmavP0D0DujOA8mjiBfyj71wmI2VQZKnnZQsSWWsxDKNiQIqk8sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>   
+</body>
+</html>

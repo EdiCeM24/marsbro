@@ -1,0 +1,65 @@
+{% load static %}
+
+<div class="footer-1">
+  <div class="footer-2">
+    <div class="left-side-footer">
+      <p>MarsBro ipsum dolor sit amet consectetur adipisicing elit. Commodi officia porro aliquam!</p>
+      <a href="{% url 'home' %}">Home</a>
+      <a href="#">About</a>
+      <a href="#">About</a>
+      <a href="#">About</a>
+    </div>
+    <div class="middle-side-footer">
+      <strong>Quick Links</strong>
+      <a href="#">About</a>
+      <a href="#">About</a>
+      <a href="#">About</a>
+      <a href="#">About</a>
+    </div>
+    <div class="right-side-footer">
+      <strong>Quick Links</strong>
+      <a href="{% url 'about' %}">About</a>
+      <a href="{% url 'products' %}">Shopping</a>
+      <a href="{% url 'contact' %}">Contact</a>
+      <a href="{% url 'cart' %}">Cart</a>
+      <a href="{% url 'logout' %}" class="log-out">Logout</a>
+    </div>
+  </div>
+  <div class="footer-last">
+      <span class="footer-end">
+        All rights reserved &copy;
+        <script>document.writeln(new Date().getFullYear());</script>
+        <p></p>
+      </span>
+      <span class="footer-end-2">
+        <h2>Reach us out:</h2>
+       <div class="links-socials">
+          <a href="https://marsbro.onrender.com">EdiMars</a>
+          <a href="mailto: xemars24@gmail.com">Xemars</a> 
+          <a href="tel: +2348145627683">+234 (0) 814 562 7683</a>
+       </div>
+      </span>
+    </div>
+    <div class="foot">
+      <span class="foot-span">
+        <p>Developed by</p>
+        <a href="https://marsbro.onrender.com">EdiMars</a>
+        <a href="mailto: edimarsxe@gmail.com">E-mail</a>
+      </span>
+
+      <div class="foot-link-socials">
+        <a href="https://www.facebook.com/Sefiok Cletus"><img src="{% static '/images/bxl-facebook-circle.png' %}" alt=""></a>
+        <a href="https://instagram.com/edi_cem24"><img src="{% static '/images/bxl-instagram.png' %}" alt=""></a>
+        <a href="https://linkedin.com/in/cletus-marcus"><img src="{% static '/images/bxl-linkedin-square.png' %}" alt=""></a>
+        <a href="https://x.com/Edi_CeM24"><img src="{% static '/images/bx-x.png' %}" alt=""></a>
+      </div>
+
+      <span>
+        <form action="" method="post" class="subscribe-form">
+          {% csrf_token %}
+          <input type="text" name="subscribe" id="subscribe-input" placeholder="Subscribe for free with email">
+          <button type="submit" class="btn bg-teal-700">Subscribe</button>
+        </form>
+      </span>
+    </div> 
+</div>

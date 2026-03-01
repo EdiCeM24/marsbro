@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="{% static 'images/favicon3.ico' %}" type="image/x-icon">
+  <title>Marsbro Mars{% block title %} | Login Page {% endblock title %}</title>
+  <link rel="stylesheet" href="{% static '/css/responsive.css' %}">
+  <link rel="stylesheet" href="{% static '/css/index.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Ovo&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+ 
+</head>
+<body>
+  <header class="header">
+    <a href="" class="myLogo">
+      <img src="{% static '/images/favicon3.ico' %}" alt="">
+      <span>MarsBro</span>
+    </a>
+    <div class="logout">
+      <a href="{% url 'logout' %}">Logout</a>
+    </div>
+  </header>
+  <div class="signup-container">
+    <div class="login-form-container">
+      <strong class="form-headings">Please, fill in the information acurately</strong>
+      <div class="form-sub-headings">
+        <p>
+          {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            </ul>
+          {% endif %}
+
+        </p>
+      </div>
+    </div>
+
+    <div class="form-div">
+      <strong>Login Here</strong>
+      <form action="" method="POST" class="login-form">
+        {% csrf_token %}
+        <div class="form-contents">
+          
+          <div class="form-control">
+            <span>
+              <label for="username" class="label-control">Username:</label>
+              {{ form.username }}
+            </span>
+          </div>
+          
+          <div class="form-control">
+            <span>
+              <label for="password1" class="label-control">Password:</label>
+              {{ form.password }}
+            </span>
+
+          </div>
+
+          
+          <div class="login-form-control">
+            <p class="login-text">Don't have an account?  <a href="{% url 'register' %}" class="login-link">Sign Up</a></p>
+            <p class="forgot-password-text">Forgot password? <a href="{% url 'password_reset' %}" class="forgot-password-link">Login With E-mail</a></p>
+          </div>
+
+
+          <button type="submit" class="login-btn">Login</button>
+
+          <div class="">
+            <strong class="or-text">Or</strong>
+          </div>
+          
+          <div class="social-login">
+            <p>Login with Social account:</p>
+            <div class="login-sos">
+              <a href="" class="social-links">
+                <img src="{% static 'images/google2.png' %}" alt="">
+              </a>
+              <a href="" class="social-links">
+                <img src="{% static 'images/github.jpg' %}" alt="">
+              </a>
+            </div>
+          </div>
+
+          
+        </div>
+
+      </form>
+    </div>
+  </div>
+  <script src="{% static 'script/app.js' %}"></script>
+  <script src="{% static 'script/script.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.0/dist/boxicons.js" integrity="sha512-Dm5UxqUSgNd93XG7eseoOrScyM1BVs65GrwmavP0D0DujOA8mjiBfyj71wmI2VQZKnnZQsSWWsxDKNiQIqk8sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+</body>
+</html>
+
+

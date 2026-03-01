@@ -1,0 +1,18 @@
+from django.contrib import admin
+from .models import *
+
+
+
+
+admin.site.register(Product)
+
+admin.site.register(Blog)
+
+admin.site.register(Contact)
+
+admin.site.register(SliderImage)
+
+admin.site.register(HomeScreen)
+
+admin.site.register(CustomUser)
+
