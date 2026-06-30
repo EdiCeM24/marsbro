@@ -1,0 +1,13 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %} | Shopping Page {% endblock title %}
+
+{% block content %}
+  <div class="">
+    {% for val in title %}
+      <h2>Category: {{ val.title }}</h2>
+    {% endfor %}
+  </div>
+{% endblock content %}

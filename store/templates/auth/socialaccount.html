@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load socialaccount %}
+
+
+templates/account/signup.html
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 rounded-xl shadow">
+  <h2 class="text-2xl font-bold mb-4">Sign Up</h2>
+
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button class="w-full bg-green-600 text-white py-2 rounded">
+      Create Account
+    </button>
+  </form>
+</div>
+{% endblock %}
+
+
+templates/account/login.html
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 rounded-xl shadow">
+  <h2 class="text-2xl font-bold mb-4">Login</h2>
+
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button class="w-full bg-blue-600 text-white py-2 rounded">
+      Login
+    </button>
+  </form>
+
+  <div class="mt-4 text-center">
+    <a href="{% provider_login_url 'google' %}" class="bg-red-500 text-white px-4 py-2 rounded">
+      Continue with Google
+    </a>
+  </div>
+
+  <p class="mt-4 text-sm">
+    Don’t have an account?
+    <a href="{% url 'account_signup' %}" class="text-blue-500">Sign up</a>
+  </p>
+</div>
+{% endblock %}

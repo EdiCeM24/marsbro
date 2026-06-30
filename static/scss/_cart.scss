@@ -1,0 +1,24 @@
+:root {
+  --color-btn: #145bc8;
+  --color-btn-2: #27a4f8;
+  --color-blackground: #121345;
+  --color-eaf: #eaf;
+  --color-viomes: #c20cf0;
+  --color-secondary: #008080;
+  --color-white: #ffffff;
+  --color-deno: #020340;
+  --color-text: #fff5ee;
+  --color-text-dark: #050200;
+  --color-text-2: #c0c0c0;
+  --color-pups: #800080;
+}
+
+/** ========== CART SECTION ========== **/
+.carts {
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #27a4f8;
+}

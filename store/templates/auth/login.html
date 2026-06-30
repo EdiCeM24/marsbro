@@ -1,0 +1,122 @@
+{% extends 'main/base.html' %} 
+
+{% load static %}
+
+  {% block title %} | Register Page {% endblock title %}
+  
+  {% block content %}
+  <div class="auth-container">
+   
+
+    <div class="signup-container">
+      
+      <div class="signup-form-container">
+        <div class="signup-form-sub-headings">
+          <p>
+            {% if messages %}
+            <ul class="messages" id="msg-container">
+              {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                  {{ message }}
+                  <button type="button" id='msg-btn'>X</button>
+                </li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </p>
+          
+        </div>
+        
+        <div class="signup-headings">
+          <strong class="form-headings">Welcome back!</strong>
+          <span>Please sign in to your account...</span>
+        </div>
+      </div>  
+      <form action="" method="POST" class="signup-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-container">
+
+          <div class="inner-signup-form-container">
+              <div class="form-control">
+                <span>
+                  <strong class="form-text-input">Email ID:</strong> 
+                  <strong class="input-form">{{ form.username }}</strong>
+                </span>
+              </div>
+
+              <div class="form-control">
+                <span>
+                  <strong class="form-text-input">Password:</strong> 
+                  <strong class="input-form">{{ form.password }}</strong>
+                  <p class="password_view" id="show-password-login"><i class="fa fa-eye" aria-hidden="true"></i></p>
+                </span>
+
+              </div>
+            
+    
+            <button type="submit" class="signup-btn">Sign In</button>
+          </div>
+
+            <div class="signup-form-control">
+              <p class="login-text">Don't have an account?  <a href="{% url 'register' %}" class="login-link">Register</a></p>
+              <p style="color: aliceblue;">Forgot Password?  <a href="{% url 'password_reset' %}" class="forgot-password-link">Reset</a></p>
+            </div>
+
+
+          <div class="text-or">
+            <strong class="or-text">Or</strong>
+          </div>
+            
+          <div class="social-login">
+            <p>Login with Social account:</p>
+            <div class="login-sos">
+              <a href="" class="social-links">
+                <img class="signup-img" src="{% static '/images/google2.png' %}" alt="">
+              </a>
+              <a href="" class="social-links">
+                <img class="signup-img" src="{% static '/images/github.jpg' %}" alt="">
+              </a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <footer class="footer">
+
+  </footer>
+
+  <script>
+    const passwordInputLogin = document.querySelector("input[name='password']");
+    const showPasswordLogin = document.getElementById('show-password-login');
+
+    showPasswordLogin.addEventListener('click', () => {
+      if (passwordInputLogin.type === 'password') {
+        passwordInputLogin.type = 'text';
+        showPasswordLogin.innerHTML = '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
+        showPasswordLogin.classList.remove('i');
+        showPasswordLogin.classList.add('i');
+      } else {
+         passwordInputLogin.type = 'password';
+        showPasswordLogin.innerHTML = '<i class="fa fa-eye" aria-hidden="true"></i>';
+        showPasswordLogin.classList.remove('i');
+        showPasswordLogin.classList.add('i');
+      }
+
+    });
+
+    
+  </script>
+
+{% endblock content %} 
+  
+  
+  
+  
+  
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.0/dist/boxicons.js" integrity="sha512-Dm5UxqUSgNd93XG7eseoOrScyM1BVs65GrwmavP0D0DujOA8mjiBfyj71wmI2VQZKnnZQsSWWsxDKNiQIqk8sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+
+
+

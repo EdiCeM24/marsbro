@@ -1,0 +1,38 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %} | Contact Page {% endblock title %}
+
+{% block content %}
+<div class="screen-container">
+  <div class="screen-headings">
+    <h1>The whatever text here...</h1>
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero repudiandae facilis aperiam corporis vero dicta amet optio velit a cumque.
+    </p>
+  </div>
+
+  <div class="screen-text">
+    <strong>The Video Tutorials is a way of ...</strong>
+  </div>
+
+  <div class="screen-vid">
+    {% for video in vids %}
+      <div class="vid" id="mainVid">
+        <video width="440" height="200" controls autoplay>
+          <source src="{{ video.image.url }}" type="video/mp4">
+        </video>
+        <span class="vid-icons">
+          <i class="fa-slab-press fa-regular fa-stop"></i>
+          <i class="fa-slab-press fa-regular fa-triangle-exclamation"></i>
+          <i class="fa-slab-press fa-regular fa-volume"></i>
+        </span>
+        <h2>{{ video.title }}</h2>
+        <small>{{ video.updated }}</small>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock content %}

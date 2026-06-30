@@ -1,0 +1,44 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %} | Blog Page {% endblock title %}
+
+{% block content %}
+  <div class="blog-container container mx-auto">
+    <div class="blog-text-container">
+      <strong class="blog-text">Here you have full details and informations</strong>
+      <p class="blog-para">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem minima, distinctio ipsam, labore, minus natus ex pariatur iusto perferendis fuga neque maxime vel. Velit sapiente quam ex fugit cum fugiat suscipit dolorem architecto aut consectetur. Officia minus sint eius quisquam?</p>
+    </div>
+
+    <div class="video-tutorials">
+      <a href="{% url 'homeScreens' %}" class="video-link">
+        <img src="{% static '/images/bx-image-alt.png' %}" class="icon" alt="">
+        Video Tutorial 
+        <img src="{% static '/images/bxs-chevron-right.png' %}" class="icon-2" alt="">
+      </a>
+    </div>
+    
+    <div class="blog-content">
+      {% for product in blog %}
+        <span class="blog-product">
+          <h2 class="text-xl font-semibold font-serif">{{ product.topic }}</h2>
+          <img src="{{ product.image.url }}" alt="Photo">
+          <span class="image-icons">
+            <a href="#" class="icon-expand"> <img src="{% static '/images/bx-expand.png' %}" alt=""></a>
+            <a href="{% url 'homeScreens' %}" class="icon-link"><img src="{% static '/images/bx-link.png' %}" class="icon-3" alt=""></a>
+            <a href="#" class="icon-img"><img src="{% static '/images/bx-image-alt.png' %}" alt=""></a>
+          </span>
+          <strong class="">{{ product.details }}</strong>
+          <p class="blogs-para-text">{{ product.updated }}</p>
+          <a href="">
+            Download  
+            <i class="fa-slab fa-regular fa-arrow-down"></i>
+          </a>
+          
+        </span>
+      {% endfor %}
+
+    </div>
+  </div>
+{% endblock content %}

@@ -1,0 +1,70 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %} | Contact Page {% endblock title %}
+
+{% block content %}
+  <div class="contact-container">
+    <div class="contact-headings">
+      <strong class="contact-heading-text">
+        We'd Love to Hear From You
+      </strong>
+      <p>
+        Whether you need support or want to share feedback, your message is important to us.
+      </p>
+    </div>
+ 
+    <div class="social-media-conn">
+      <p>We can as well be reached out with these links:</p>
+      <div class="contact-media-links">
+        <a href="mailto:xevious077@gmail.com" class="email-link">xevious077@gmail.com  <img src="{% static '/images/at.jpg' %}" alt=""></a>
+        <a href="#" class="whatsapp-line">WhatsApp with us: +234 (0) 8145627683  <img src="{% static '/images/whatsapp.jpg' %}" alt=""></a>
+        <a href="https://marsbro.onrender.com" class="website-link">marsbro.onrender.com  <img src="{% static '/images/website.png' %}" alt=""></a>
+      </div>
+    </div>
+
+    <div class="contact-form-container">
+      <strong class="form-headings">Fill out the contact form</strong>
+      <div class="form-sub-headings">
+        <p>
+          {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            </ul>
+          {% endif %}
+        </p>
+      </div>
+
+      <form action="" method="POST" class="contact-form">
+        {% csrf_token %}
+        <div class="">
+          <div class="form-control">
+              <input type="text" name="name" id="name" placeholder="Your full name..." required>
+              <input type="email" name="email" id="email" placeholder="Your full email..." required> 
+            </div>
+    
+            <div class="form-control">
+              <input type="text" name="company_name" id="company_name" placeholder="Enter company_name..." required>
+              <input type="tel" name="phone_number" id="phone_number" placeholder="Your phone_number..." required>
+            </div>
+            <div class="form-control">
+              <input type="url" name="website" id="website" placeholder="Website https://..." required>
+              <input type="text" name="subject" id="subject" placeholder="Enter Your Subject..." required>
+            </div>
+          
+            <div class="form-control">
+              <textarea name="message" id="message" placeholder="Your message here" cols="30" rows="10"></textarea>
+            </div>
+  
+        </div>
+
+        <button type="submit" class="contact-btn">Submit</button>
+      </form>
+    </div>
+  </div>
+{% endblock content %}

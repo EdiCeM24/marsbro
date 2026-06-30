@@ -1,0 +1,179 @@
+{% extends 'main/base.html' %} 
+
+{% load static %}
+
+  {% block title %} | Register Page {% endblock title %}
+  
+  {% block content %}
+
+  <div class="auth-container">
+   
+
+    <div class="signup-container">
+      
+      <div class="signup-form-container">
+        <div class="signup-form-sub-headings">
+          <p>
+            {% if messages %}
+            <ul class="messages">
+              {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %} id="msg-container">
+                  {{ message }}
+                </li>
+                <button type="button" id='msg-btn'>X</button>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </p>
+          
+        </div>
+        
+        <div class="signup-headings">
+          <strong class="form-headings">Welcome!</strong>
+          <span>Please create your account...</span>
+        </div>
+      </div>  
+      <form action="" method="POST" class="signup-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-container">
+
+            <div class="form-control">
+              <div class="profile">
+                <strong class="profile-form-text-input">Profile:</strong>
+                <span>{{ form.profile_picture }}</span>
+              </div>
+           </div>
+
+          <div class="inner-signup-form-container">
+              <div class="form-control">
+                <span>
+                  <strong class="form-text-input">First name:</strong> 
+                  <strong class="input-form">{{ form.first_name }}</strong> 
+                </span>
+                <span>
+                  <strong class="form-text-input">Last name:</strong> 
+                  <strong class="input-form">{{ form.last_name }}</strong>
+                </span>
+                
+              </div>
+      
+              <div class="form-control">
+                <span>
+                  <strong class="form-text-input">Username:</strong> 
+                  <strong class="input-form">{{ form.username }}</strong>
+                </span>
+
+                <span>
+                  <strong class="form-text-input">Email ID:</strong> 
+                  <strong class="input-form">{{ form.email }}</strong>
+                </span>
+              </div>
+              <div class="form-control">
+                <span>
+                  <strong class="form-text-input">Password:</strong> 
+                  <strong class="input-form" id="password">{{ form.password1 }}</strong>
+                  <p class="password_view" id="show-password"><i class="fa fa-eye" aria-hidden="true"></i></p>
+                </span>
+
+                <span>
+                  <strong class="form-text-input">Confirm password:</strong> 
+                  <strong class="input-form">{{ form.password2 }}</strong>
+                  <p class="password_view" id="show-password2"><i class="fa fa-eye" aria-hidden="true"></i></p>
+                </span>
+              </div>
+            
+    
+            <button type="submit" class="signup-btn">Register</button>
+          </div>
+
+            <div class="signup-form-control">
+              <p class="login-text">Have an account?  <a href="{% url 'login' %}" class="login-link">Login</a></p>
+              <a href="{% url 'password_reset' %}" class="forgot-password-link">Forgot Password?</a>
+            </div>
+
+            <div class="term-form-control">
+              <p>By Clicking on register you have agreed to  <a href="">Terms and Conditions </a> and  <a href="">Privacy Policy</a></p>
+            </div> 
+
+
+          <div class="text-or">
+            <strong class="or-text">Or</strong>
+          </div>
+            
+          <div class="social-login">
+            <p>Signup with Social account:</p>
+            <div class="login-sos">
+              <a href="" class="social-links">
+                <img class="signup-img" src="{% static '/images/google2.png' %}" alt="">
+              </a>
+              <a href="" class="social-links">
+                <img class="signup-img" src="{% static '/images/github.jpg' %}" alt="">
+              </a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <footer class="footer">
+
+  </footer>
+
+<script>
+    
+// REGISTER PASSWORD REAVELS
+    const passwordInput = document.querySelector('input[name="password1"]');
+    const passwordInput2 = document.querySelector("input[name='password2']");
+    
+    const showPassword = document.getElementById('show-password');
+    const showPassword2 = document.getElementById('show-password2');
+
+
+    showPassword.addEventListener('click', () => {
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        showPassword.innerHTML = '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
+        
+        showPassword.classList.remove('i');
+        showPassword.classList.add('i');
+      } else {
+        passwordInput.type = 'password';
+        showPassword.innerHTML = '<i class="fa fa-eye" aria-hidden="true"></i>';
+        showPassword.classList.remove('i');
+        showPassword.classList.add('i');
+      }
+    });
+
+
+    showPassword2.addEventListener('click', () => {
+      if (passwordInput2.type === 'password') {
+        passwordInput2.type = 'text';
+        showPassword2.innerHTML = '<i class="fa fa-eye-slash" aria-hidden="true"></i>';
+        showPassword2.classList.remove('i');
+        showPassword2.classList.add('i');
+      } else {
+        passwordInput2.type = 'password';
+        showPassword2.innerHTML = '<i class="fa fa-eye" aria-hidden="true"></i>';
+        showPassword2.classList.remove('i');
+        showPassword2.classList.add('i');
+      }
+    });
+
+
+
+// MESSAGE REGISTER CANCEL
+const msgBtnEl = document.getElementById('msg-btn');
+const msgContainerEl = document.getElementById('msg-container');
+
+msgBtnEl.addEventListener('click', show);
+
+function show() {
+  msgContainerEl.style.display = 'none';
+  msgBtnEl.style.display = 'none';
+};
+
+</script>
+
+{% endblock content %}  
+
+

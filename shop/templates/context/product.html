@@ -1,0 +1,169 @@
+{% extends 'main/base.html' %} {% load static %} {% block title %} | Shopping
+Page {% endblock title %} | Shopping {% block content %}
+<div class="product-container">
+  <div class="product-headings">
+    <a href="{% url 'checkout' %}">Checkout</a>
+    <strong class="prod-headings"
+      >Lorem ipsum dolor sit amet consectetur.</strong
+    >
+    <p>
+      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde aliquid
+      iusto saepe ipsa maiores nemo sint nobis incidunt recusandae dolorum,
+      doloremque laborum, est dolore ea.
+    </p>
+  </div>
+
+  {% load rating_stars %}
+
+  <div class="select-products">
+    <select name="" id="" class="cat">
+      <option value="">Categories</option>
+      {% for category in categories %}
+      <option value="" id="">
+        <a href="{% url 'product_by_category' category.slug %}"
+          >{{ category.name }}</a
+        >
+      </option>
+      {% endfor %}
+    </select>
+
+    <select name="" id="" class="cat">
+      <option value="">Colors</option>
+      {% for category in categories %}
+      <option value="" id="">
+        <a href="{% url 'product_by_category' category.slug %}"
+          >{{ category.color }}</a
+        >
+      </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="">
+    {% if category %}
+    <h2>Category: {{ category.name }}</h2>
+    {% else %}
+    <strong>All Products:</strong>
+    {% endif %}
+  </div>
+
+  <div class="products-list">
+    <div class="prod-bg"></div>
+
+    <div class="prod-views">
+      {% for product in products %}
+      <div class="prod-conn">
+        <div class="product-img">
+          {% if product.product_image %}
+          <!--product.slug-->
+          <a href="{% url 'product_detail' product.id product.slug %}">
+            <!--Product.slug-->
+            <img
+              src="{{ product.product_image.url }}"
+              alt="{{ product.name }}"
+            />
+          </a>
+          {% else %}
+          <p class="">The image is not available.</p>
+          {% endif %}
+        </div>
+
+        <span class="prod-title">
+          <h3>{{ product.name }}</h3>
+          <!-- <a
+            href="{% url 'add_to_wishlist' product.id %}"
+            class="wishlist-icon"
+          >
+            <i
+              class="fa fa-heart {% if product.id in user_wishlist %} filled {% endif %}"
+            ></i> -->
+          <!-- </a> -->
+          <button class="wishlist-btn" data-id="{{ product.id }}">❤️</button>
+        </span>
+
+        <p class="product-desc">{{ product.desc | truncatewords:15}}</p>
+        <div class="product_rating_tag">
+          <p class="">Available: {{ product.available }}</p>
+
+          <p class="ratings">
+            <span id="rating-{{ product.id }}"
+              >{{ product.average_rating | rating_stars }}</span
+            >
+          </p>
+          <p id="message-{{ product.id }}"></p>
+          <form action="" id="rating-form-{{ product.id }}" class="rating-form">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ product.id }}" />
+            <div class="star-rating">
+              <input
+                type="radio"
+                id="star5-{{ product.id }}"
+                name="rating"
+                value="5"
+              /><label for="star5-{{ product.id }}">&#9733;</label>
+              <input
+                type="radio"
+                id="star4-{{ product.id }}"
+                name="rating"
+                value="4"
+              /><label for="star4-{{ product.id }}">&#9733;</label>
+              <input
+                type="radio"
+                id="star3-{{ product.id }}"
+                name="rating"
+                value="3"
+              /><label for="star3-{{ product.id }}">&#9733;</label>
+              <input
+                type="radio"
+                id="star2-{{ product.id }}"
+                name="rating"
+                value="2"
+              /><label for="star2-{{ product.id }}">&#9733;</label>
+              <input
+                type="radio"
+                id="star1-{{ product.id }}"
+                name="rating"
+                value="1"
+              /><label for="star1-{{ product.id }}">&#9733;</label>
+            </div>
+
+            <!-- <button type="button" id="remove-rating-{{ product.id }}" class="remove-rating">Remove Rating</button> -->
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script>
+    document.querySelector(".wishlist-icon").addEventListener("click", () => {
+      event.preventDefault();
+      const url = this.href;
+      fetch(url, {
+        method: "GET",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      }).then((Response) => Response.json()).then;
+    });
+
+    // WISHLIST BUTTON CODE:
+    document.querySelectorAll(".wishlist-btn").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        fetch("/wishlist/toggle/", {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: "product_id=" + this.dataset.id,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            alert(data.status);
+          });
+      });
+    });
+  </script>
+</div>
+{% endblock content %}

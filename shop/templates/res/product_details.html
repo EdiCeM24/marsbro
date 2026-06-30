@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  {% load static %}
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="shortcut icon"
+      href="{% static '/images/favicon3.ico' %}"
+      type="image/x-icon"
+    />
+    <title>
+      Marsbro {% block title %} | Product Views {% endblock title %}
+    </title>
+    <link rel="stylesheet" href="{% static '/css/index.css' %}" />
+    <link rel="stylesheet" href="{% static '/scss/product_details.scss' %}" />
+  </head>
+  <body>
+    <header class="prod-header">
+      <div class="Logo">
+        <a href="{% url 'home' %}" class="myLogo">
+          <img src="{% static 'images/favicon3.ico' %}" alt="MarsBro" />
+          <span class="myLogo-text">MarsBro</span>
+        </a>
+      </div>
+    </header>
+    <div class="prod-con">
+      <div class="product_details_image">
+        <a href="{% url 'products' %}" class="">
+          <img src="{{ product.product_image.url }}" alt="" />
+        </a>
+      </div>
+
+      <div class="btn-cart-product">
+        <!-- <a href="{% url 'add_to_cart' product.id %}">Add To Cart</a> -->
+        <div class="product_name_desc_price">
+          <h3 class="" id="product-name">Name: {{ product.name }}</h3>
+          <strong class="">Price: ₦{{ product.price }}</strong>
+          <p class="">{{ product.desc }}</p>
+          <p class="text-xl text-green-600 mt-2">₦{{ product.get_price }}</p>
+        </div>
+
+        <form
+          action="{% url 'add_to_cart' product.id %}"
+          id="add_to_cart_form"
+          method="POST"
+        >
+          {% csrf_token %}
+          <button type="submit" class="btn-add_to_cart">Add To Cart</button>
+        </form>
+
+        <div class="contact_message_links">
+          <a href="" class="contact-seller">Contact Seller</a>
+          <div class="msg-cart">
+            <p class="cart-msg" id="message">DDDDDDDd</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="related_products">
+      <strong class="related_product_heading">Additional Informations</strong>
+
+      <div class="related_product_display">
+        <div class="">
+          <a href="" class="related_product_image">
+            <img src="{{ product.product_image.url }}" alt="" />
+          </a>
+        </div>
+        <div class="related_product_details">
+          <p class="related_product_info">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. A earum
+            quae, sint corporis doloribus dolor, repellendus dicta non minima
+            numquam quisquam omnis deleniti quo doloremque itaque ullam fugiat
+            laborum. Debitis.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <footer class="prod-footer"></footer>
+
+    <script>
+      document
+        .getElementById("add_to_cart_form")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+          const form = e.target;
+          const url = form.action;
+          const formData = new FormData(form);
+
+          const productName = document.getElementById("product-name");
+
+          fetch(url, {
+            method: "POST",
+            headers: {
+              "X-CSRFToken": formData.get("csrfmiddlewaretoken"),
+            },
+            body: formData,
+          })
+            .then((Response) => Response.json())
+            .then((data) => {
+              const messageElement = document.getElementById("message");
+              if (data.success) {
+                messageElement.textContent = data.message;
+              } else {
+                message.textContent = `Failed to add ${productName} to cart.`;
+              }
+            })
+            .catch((err) => {
+              console.error("Error in fetching data: ", err);
+            });
+        });
+    </script>
+  </body>
+</html>

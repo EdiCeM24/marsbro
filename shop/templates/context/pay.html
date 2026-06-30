@@ -1,0 +1,20 @@
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
+<button onclick="pay()">Pay</button>
+
+<script>
+function pay() {
+    let handler = PaystackPop.setup({
+        key: "{{ paystack_public_key }}",
+        email: "{{ payment.user.email }}",
+        amount: "{{ payment.amount }}" * 100,
+        ref: "{{ payment.reference }}",
+
+        callback: function(response) {
+            window.location.href = "/verify/" + response.reference + "/";
+        }
+    });
+
+    handler.openIframe();
+}
+</script>

@@ -10,7 +10,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
+
 from pathlib import Path
+
+#import dj_database_url
+
+from decouple import config
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +30,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-m+^h$3a-khw#ocqwi&6m^xrhuk0hga772$bpqv*=ek=4p2-18)'
+SECRET_KEY = config(("DJANGO_SECRET_KEY"))
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,16 +48,64 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'store.apps.StoreConfig',
+    'shop.apps.ShopConfig',
+    'django.contrib.sites',
+    'compressor',
+    'star_ratings',
+    'paystack',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # ... social providers if using, e.g.
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
 ]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+    },
+    'github': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+    }
+}
+
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "compressor.finders.CompressorFinder",
+]
+
+COMPRESS_PRECOMPILERS = (
+    ("text/x-scss", "django_libsass.SassCompiler"),
+)
+
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# Allauth settings
+LOGIN_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/login/'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware", # Add this
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # ... other middleware
+    'allauth.account.middleware.AccountMiddleware', # Required
 ]
 
 ROOT_URLCONF = 'marsbro.urls'
@@ -54,13 +113,15 @@ ROOT_URLCONF = 'marsbro.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # ... other processors
+                'django.template.context_processors.request', # Required
             ],
         },
     },
@@ -115,3 +176,90 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+  os.path.join(BASE_DIR / "static")
+]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+STATIC_ROOT = BASE_DIR / 'staticfiles' # Or any other desired directory name
+COMPRESS_ROOT = BASE_DIR / 'statics'
+COMPRESS_OFFLINE = True
+LIBSASS_OUTPUT_STYLE = 'compressed'
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
+# Enable compression and caching
+STORAGES = {
+    # ...
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+# settings.py
+STORAGES = {
+    # Default storage for media files
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    # Required for static files
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
+# Allauth settings
+
+# LOGIN_REDIRECT_URL = '/' # Example
+# ACCOUNT_LOGOUT_REDIRECT_URL = 'login' # Example
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # Example for development
+
+AUTH_USER_MODEL = 'store.CustomUser'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'live.smtp.mailtrap.io'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'programmingwithedimars@gmail.com'
+EMAIL_HOST_PASSWORD = str(os.getenv('MY_EMAIL_PASSWORD'))
+ADMIN_EMAIL = 'www.marsbro.com'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+ANYMAIL = {
+  "MAILTRAP_API_TOKEN": str(os.getenv('MAILTRAP_API_TOKEN')),
+}
+EMAIL_BACKEND = "anymail.backends.mailtrap.EmailBackend"
+DEFAULT_FROM_EMAIL = "hello@demomailtrap.co"
+
+# FOR PAYSTACK PAYMENT GATEWAY
+# PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
+# PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
+PAYSTACK_TEST_PUBLIC_KEY = config('PAYSTACK_TEST_PUBLIC_KEY')
+PAYSTACK_TEST_SECRET_KEY = config('PAYSTACK_TEST_SECRET_KEY')
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+ACCOUNT_LOGOUT_ON_GET = False
+
+
+
+
+
+# STATIC_URL = '/static/'
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# ALLAUTH PRODUCTION FRIENDLY
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # 🔥 production
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = '/accounts/login/'
+

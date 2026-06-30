@@ -1,0 +1,50 @@
+:root {
+  --color-btn: #145bc8;
+  --color-btn-2: #27a4f8;
+  --color-blackground: #121345;
+  --color-eaf: #eaf;
+  --color-viomes: #c20cf0;
+  --color-secondary: #008080;
+  --color-white: #ffffff;
+  --color-deno: #020340;
+  --color-text: #fff5ee;
+  --color-text-dark: #050200;
+  --color-text-2: #c0c0c0;
+  --color-pups: #800080;
+}
+
+/** ========== PRODUCT DETAILS PAGE SECTION ========== **/
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  box-sizing: border-box;
+  background-color: #dbdbd7;
+  .prod-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    .Logo {
+      padding: 0;
+      margin: 0;
+      .myLogo {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        padding: 10px;
+      }
+    }
+  }
+  .prod-con {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20%;
+    padding: 20px 30px;
+    .product_details_image {
+      float: left;
+      margin-top: 10%;
+    }
+  }
+}
