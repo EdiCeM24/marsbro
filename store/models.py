@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, AbstractBaseUser, BaseUserManager
-from django.contrib.auth.mixins import PermissionRequiredMixin # This is the 2nd problem
+# from django.contrib.auth.mixins import PermissionRequiredMixin # This is the 2nd problem
 from django.conf import settings
 from .validators import validations
 from django.utils import timezone
@@ -112,27 +112,27 @@ class CustomUserManager(BaseUserManager):
     user.save(using=self._db)
     return user
   
-class User(AbstractBaseUser, PermissionRequiredMixin):
-  email = models.EmailField(unique=True)
-  is_active = models.BooleanField(default=True)
-  is_admin = models.BooleanField(default=True)
-  date_joined = models.DateTimeField(default=timezone.now)
+# class User(AbstractBaseUser, PermissionRequiredMixin):
+#   email = models.EmailField(unique=True)
+#   is_active = models.BooleanField(default=True)
+#   is_admin = models.BooleanField(default=True)
+#   date_joined = models.DateTimeField(default=timezone.now)
 
-  objects = CustomUserManager()
+#   objects = CustomUserManager()
 
-  USERNAME_FIELD = 'email'
-  REQUIRED_FIELDS = []
+#   USERNAME_FIELD = 'email'
+#   REQUIRED_FIELDS = []
 
-  def __str__(self):
-    return self.email
+#   def __str__(self):
+#     return self.email
 
-  def has_perm(self, perm, obj=None):
-    return True
+#   def has_perm(self, perm, obj=None):
+#     return True
 
-  def has_module_perms(self, app_label):
-    return True  
+#   def has_module_perms(self, app_label):
+#     return True  
   
-  @property
-  def is_staff(self):
-    return self.is_admin
+#   @property
+#   def is_staff(self):
+#     return self.is_admin
 
