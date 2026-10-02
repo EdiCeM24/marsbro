@@ -136,3 +136,7 @@ class CustomUserManager(BaseUserManager):
 #   def is_staff(self):
 #     return self.is_admin
 
+
+class Subscriber(models.Model):
+   email = models.EmailField(unique=True)
+   subscribed_at = models.DateTimeField(auto_now_add=True)

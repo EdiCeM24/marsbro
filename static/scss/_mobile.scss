@@ -4,12 +4,20 @@
     height: 15%;
     .navbar {
       -webkit-margin-collapse: collapse;
-      .nav-btn {
+      .navbar_profile_btn_auth_unit {
         display: flex;
         align-items: center;
-        padding: 5px 8px;
-        color: #fff;
-        background-color: aqua;
+        justify-content: space-between;
+        .mobile-nav {
+          display: flex !important;
+          .nav-btn {
+            display: flex;
+            align-items: center;
+            padding: 5px 8px;
+            color: #fff;
+            background-color: aqua;
+          }
+        }
       }
       .hidden {
         transform: translateX(-100%);
@@ -151,6 +159,12 @@
     margin-top: 25% !important;
     .product-headings {
       margin-top: 20%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column !important;
+      .prod-headings {
+      }
     }
     .select-products {
       display: flex;
@@ -165,12 +179,14 @@
       max-width: 150px !important;
       .prod-views {
         display: grid;
+        padding: 10px;
         grid-template-columns: repeat(2, 1fr) !important;
         margin-right: 5px !important;
         gap: 3px !important;
         max-width: 150px !important;
         align-items: center;
         justify-content: center;
+        margin-left: 10%;
         .prod-conn {
           max-width: 150px !important;
           .product-img img {
@@ -199,13 +215,25 @@
     }
   }
 
+  /** SHOPPING SEARCH PAGE **/
+  .search_shop_container {
+    margin-top: 60%;
+    height: 100vh;
+    .product_search_shop {
+      margin-top: 50%;
+      .search_shop_items {
+        margin-top: 50%;
+      }
+    }
+  }
+
   /** REGISTER SECTION **/
   .auth-container {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    margin-top: 70px;
+    margin-top: 70px; // 70px
     margin-bottom: 20px;
     // height: 80%;
     overflow-y: auto;
@@ -258,6 +286,51 @@
     }
   }
 
+  /** PRODUCT DETAILS VIEW SECTION **/
+  .main_product_detail_page {
+    padding: 10px;
+    margin-top: 15% !important;
+    .container_detail_page {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+      .product-detail-items {
+        margin-bottom: 5px;
+        .products_detail {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          justify-content: center;
+        }
+        .product_detail_price {
+          flex: 1;
+        }
+      }
+      .product_detail_variants_images {
+        .detail-variants_container {
+          .detail_variant_contents {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+      }
+    }
+    .related_product_container {
+      margin-top: 160% !important;
+      h3 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .related_product_contents {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+      }
+    }
+  }
+
   // FOOTER SECTION
   .footer-1 {
     .footer-2 {
@@ -305,21 +378,43 @@
     height: 15%;
     .navbar {
       -webkit-margin-collapse: collapse;
-      .nav-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      gap: 15px;
+      .navbar_profile_btn_auth_unit {
         display: flex;
         align-items: center;
-        padding: 5px 8px;
-        color: #fff;
-        background-color: aqua;
-        border: none;
-        outline: none;
-      }
-      .image-pos {
-        margin-top: 0%;
+        justify-content: space-evenly;
+        gap: 10px;
+        right: 10px;
+        .mobile-nav {
+          display: flex !important;
+          gap: 10px;
+          position: relative;
+          .nav-btn {
+            display: flex;
+            align-items: center;
+            padding: 5px 8px;
+            color: #fff;
+            background-color: aqua;
+            border: none;
+            outline: none;
+          }
+        }
+        .image-pos {
+          margin-top: 0%;
+          position: relative;
+          img {
+            display: flex !important;
+          }
+        }
       }
       .hidden {
-        transform: translateX(-300px);
+        transform: translateX(-400px);
         animation: slide-out 0.3s ease-in-out;
+        transition: transform 0.3s ease-in-out;
       }
       @keyframes slide-in {
         0% {
@@ -332,6 +427,7 @@
       .show {
         transform: translateX(0%);
         animation: slide-in 0.3s ease-in-out;
+        transition: transform 0.3s ease-in-out;
       }
       @keyframes slide-out {
         0% {
@@ -354,9 +450,10 @@
         position: absolute;
         z-index: 10;
         padding: 15px 10px;
-        height: 50vh;
+        height: 40vh;
         .navbar-search {
           display: none;
+          padding: 15px 30px;
         }
         .header_middle_links {
           gap: 4px;
@@ -373,24 +470,31 @@
             padding: 5px;
             // margin: 4px auto;
             line-height: 1.5;
+            a {
+              font-size: 24px;
+              font-weight: 600;
+            }
+            .resources-links {
+              font-size: 24px;
+              font-weight: 600;
+            }
+            .menu-nav-links a {
+              font-size: 22px;
+              font-weight: 600;
+            }
           }
         }
         .auth {
           display: block;
+          padding: 10px;
+          margin-bottom: 10px;
           a {
             display: block;
           }
         }
       }
-      .navbar_profile_btn_auth_unit {
-        position: relative;
-        .cart-icon {
-          position: absolute;
-          right: 3%;
-          top: 0;
-        }
-      }
     }
+    // SIGNUP AND LOGIN
   }
   //========= INDEX MAIN PAGE =========
   // FROM INDEX PAGE
@@ -422,7 +526,8 @@
     padding: 5px 10px;
     margin-top: 35% !important;
     .product-headings {
-      margin-top: 25%;
+      margin-top: 5%;
+      margin-bottom: 5%;
     }
     .select-products {
       display: flex;
@@ -436,7 +541,7 @@
       padding: 10px 5px !important;
       .prod-views {
         display: grid;
-        grid-template-columns: repeat(3, 1fr) !important;
+        grid-template-columns: repeat(2, 1fr) !important;
         margin-right: 5px !important;
         gap: 3px !important;
         flex-wrap: wrap;
@@ -444,8 +549,8 @@
         justify-content: center;
         .prod-conn {
           .product-img img {
-            width: 200px;
-            height: 200px;
+            width: 300px;
+            height: 300px;
           }
           .rating-form {
             .star-rating {

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 # # from paystack import paystack
 from django.conf import settings
 import requests
+from django.db.models import Q
 from decouple import config
 from django.contrib.auth.decorators import login_required
 from .models import Payment
@@ -13,11 +14,13 @@ from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.conf import settings
-from .models import Products, Category, Order, OrderItem, Payment, PurchaseHistories, Cart, CartItem, Review, ReviewReport, BankTransferDetail, Wishlist
+from .models import Products, Category, Order, OrderItem, Payment, ProductImage, ProductVariant, PurchaseHistories, Cart, CartItem, Review, ReviewReport, BankTransferDetail, Wishlist
 from .templatetags.rating_stars import rating_stars
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
 from decimal import Decimal
+from store.models import Product
+from store.models import Blog
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
 
@@ -27,33 +30,151 @@ from django.contrib.auth.decorators import login_required
     
 @login_required(login_url='login')
 def product_list(request):
-    products = Products.objects.filter(available=True)
+    categories = Category.objects.all()
+    products = Products.objects.all().order_by(
+        'name', 
+        'available', 
+        'category',
+        'variants',
+        'variants__size',
+        'variants__color',
+    )
+   
+    # product_avs = Products.objects.filter(available=True)
     paginator = Paginator(products, 25)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
 
-
-    page = request.GET.get('page')
-    products = paginator.get_page(page)
+     # Sorting by price
+    sort_by = request.GET.get('sort_by')
+    if sort_by == 'price_asc':
+        products = products.order_by('price')
+    elif sort_by == 'price_desc':
+        products = products.order_by('-price')    
+    sort_by = request.GET.get('sort_by')
+    if sort_by == 'name_asc':
+        products = products.order_by('name')
+    elif sort_by == 'name_desc':
+        products = products.order_by('-name')
 
     return render(request, 'context/product.html', {
+        'page_obj': page_obj,
+        'categories': categories,
         'products': products,
-        'paginator': paginator,
-        'page': page,
+    })
+
+# BEST CATEGORY USAGE
+@login_required(login_url='login')
+def category_products(request, slug):
+    category = Category.objects.get(slug=slug)
+    # Fetching Products with Variants
+    products = Products.objects.select_related(
+        "category",
+        "subcategory",
+        "owner"
+    ).prefetch_related(
+        "variants__color",
+        "variants__size",
+        "variants__images",
+    ).filter(category=category, available=True)
+   
+    paginator = Paginator(products, 25)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)    
+
+    return render(request, 'context/product.html', {
+        'page_obj': page_obj,
+        'category': category,
     })
 
 
 @login_required(login_url='login')
 def product_detail(request, product_id, slug):
-    product = get_object_or_404(Products, id=product_id, slug=slug)
-    return render(request, 'res/product_details.html', {'product': product})
+    variants = ProductVariant.objects.filter(product_id=product_id)
 
-
-def category_products(request, slug):
-    category = get_object_or_404(Category, slug=slug)
-    products = category.products.filter(available=True).select_related('category')
-    return render(request, 'res/category.html', {
-        'category': category,
-        'products': products
+    images = ProductImage.objects.filter(product_variant__in=variants)
+    front_images = images.filter(position='front')
+    back_images = images.filter(position='back')
+    right_images = images.filter(position='right')
+    left_images = images.filter(position='left')
+    # other_images = images.filter(position='other')
+    # Fetching Products with Variants(optional)
+    products = Products.objects.select_related(
+        "category",
+        "subcategory",
+        "owner"
+    ).prefetch_related(
+        "variants__color",
+        "variants__size",
+        "variants__images",
+    ).get(id=product_id, slug=slug)
+     #  Fetch the products
+    # product = get_object_or_404(Products, id=product_id, slug=slug)
+    return render(request, 'res/product_details.html', {
+        'products': products,
+        'variants': variants,
+        'front_images': front_images,
+        'back_images': back_images,
+        'right_images': right_images,
+        'left_images': left_images,
+        # 'other_images': other_images,
     })
+
+
+def variant_details(request, product_pk, variant_pk):
+    variant = ProductVariant.objects.get(product_pk, pk=variant_pk)
+    images = variant.images.all()
+    return render(request, 'res/variant_details.html', {
+        'variant': variant,
+        'images': images,
+    })
+
+
+def product_image(request, pk):
+    product_img = ProductImage.objects.get(pk=pk)
+    return render(request, '', {})
+
+
+def search_products(request):
+    query = request.GET.get('q')
+    if query:
+        product_cats = Products.objects.filter(Q(name__icontains=query) | Q(desc__icontains=query))
+    # else:
+    #     product_cats = Products.objects.all()
+    products = Product.objects.filter(
+        Q(topic__icontains=query) | Q(text__icontains=query)
+    )
+    
+    return render(request, 'res/search.html', {
+        'product_cats': product_cats,
+        'products': products,
+    })
+
+
+def blog_post_detail(request, pk):
+    posts = Product.objects.get(pk=pk)
+    return render(request, 'home/index.html', {
+        'posts':posts
+    })
+
+# def category_products(request, slug):
+#     category = get_object_or_404(Category, slug=slug)
+#     # Fetching Products with Variants
+#     products = Products.objects.select_related(
+#         "category",
+#         "subcategory",
+#         "owner"
+#     ).prefetch_related(
+#         "variants__color",
+#         "variants__size",
+#         "variants__images",
+#     )
+#     product = category.products.filter(available=True).select_related('category')
+#     return render(request, 'includes/category.html', {
+#         'category': category,
+#         'product': product,
+#         'products': products
+#     })
 
 
 # ========== CART SECTION TO BE REVIEW ==========
@@ -63,13 +184,22 @@ def category_products(request, slug):
 def cart_view(request):
     cart_items, _ = Cart.objects.get_or_create(user=request.user)
     # cart_items = cart.items.all()
-    total_price = 0
+    total_price = sum(item.product.price * item.quantity for item in cart_items.items.all())
     # for item in cart_items:
         # total_price += item.quantity * item.product.get_price
     return render(request, 'context/cart.html', {
         'cart_items': cart_items,
         'total_price': total_price,
+        'cart_count': cart_items.items.count()
     })
+
+
+# CART COUNT
+def get_cart_count(request):
+    if request.user.is_authenticated:
+        cart = Cart.objects.get(user=request.user)
+        return JsonResponse({'cart_count': cart.products.count()})
+    return JsonResponse({ 'cart_count': 0 })
 
 
 # @require_POST
@@ -84,7 +214,7 @@ def add_to_cart(request, product_id):
         item.quantity += 1
         item.save()
 
-    return redirect('cart')
+    return JsonResponse({'cart_count': cart.items.count()})
 
 
 @require_http_methods(['GET', 'POST'])
@@ -96,7 +226,10 @@ def increase_quantity(request, product_id):
     cart_item.quantity += 1
     cart_item.save()
 
-    return redirect('cart')
+    return JsonResponse({
+        'quantity': cart_item.quantity,
+        'cart_count': cart.items.count(),
+    })
 
 # ========== BEGINNING OF INCREMENT AND DECREMENT BUTTON BROUGHT BY ME ==========
 def increment_quantity(request, product_id):
@@ -127,8 +260,18 @@ def decrease_quantity(request, product_id):
     return redirect('cart')
 
 @login_required(login_url='login')
-def remove_from_cart(request):
-    return render(request, 'context/cart.html')
+def remove_from_cart(request, product_id):
+    try:
+        product = Products.objects.get(id=product_id)
+    
+        cart = Cart.objects.get(user=request.user)
+        
+        cart.products.remove(product) 
+        cart.save()
+        return redirect('cart')
+    except (product.DoesNotExist, cart.DoesNotExist):
+        return redirect('cart')
+    
 
 
 

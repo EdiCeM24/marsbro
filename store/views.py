@@ -4,16 +4,26 @@ from .models import *
 import re
 from dotenv import load_dotenv
 import os
+from django.core.paginator import Paginator
 import mailtrap as mt
 from django.contrib.auth import login, authenticate, logout
 from .forms import SignupForm, LoginForm, ContactForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from django.http import HttpResponse
 from .validators import validations
+from django.conf import settings
+# PASSWORD RESET SECTION
+from django.http import HttpResponse, HttpResponseRedirect
+from django.core.mail import send_mail
 import requests
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.views import PasswordResetView
+from django.urls import reverse
+from .forms import PasswordResetRequestForm, Subscriber
+from .models import CustomUser
+from django.db.models import Q
+# from .forms import SubscribeForm, Subscriber
 
 
 load_dotenv()
@@ -21,10 +31,22 @@ load_dotenv()
 @login_required(login_url='login')
 def home (request):
     products = Product.objects.all()
+
     total_count = Product.objects.count()
+    paginator = Paginator(products, 25)
+    page = request.GET.get('page', 1)
+    product = paginator.get_page(page)
+
+    sort_by = request.GET.get('sort_by')
+    if sort_by == 'name_asc':
+        products = Product.order_by('name')
+    elif sort_by == 'name_desc':
+        products = products.order_by('-name')
+
     return render(request, 'home/index.html', {
       'products': products,
       'total_count': total_count,
+      'product': product,
     })
 
 @login_required(login_url='login')
@@ -40,6 +62,59 @@ def about(request):
     return render(request, 'context/about.html', {
   
     })
+
+
+# def search_products(request):
+#     query = request.GET.get('q')
+#     if query:
+#         products = Product.objects.filter(Q(topic__icontains=query) | Q(text__icontains=query))
+#     else:
+#         products = Product.objects.all()
+#     return render(request, 'context/search_products.html', {
+#         'products': products,
+#     })    
+
+# SUBSCRIPTION SECTION
+def subscribe(request):
+    if request.method == 'POST':
+        email = request.POST.get('subscribe')
+
+        if email:
+            if Subscriber.objects.filter(email=email).exists():
+                messages.error(request, 'You are already subscribed to our newsletter.')
+            else:
+                Subscriber.objects.create(email=email)
+                messages.success(request, 'You have been subscribed to our newsletter.')
+            return redirect('home')
+        else:
+            messages.error(request, 'Please enter a valid email address.')
+            return redirect('home')    
+    return render(request, 'includes/footer.html')                
+
+# THIS IS FROM FORMS.PY FORMAT OF SUBSCRIPTION:
+# def subscribe(request):
+#     if request.method == 'POST':
+#         form = SubscribeForm(request.POST)
+#         if form.is_valid():
+#             email = form.cleaned_data['email']
+#             if Subscriber.objects.filter(email=email).exists():
+#                 messages.error(request, 'You are already subscribed to our newsletter.')
+#             else:
+#                 form.save()
+#                 messages.success(request, 'You have been subscribed to our newsletter.')
+#             return redirect('home')
+#     else:
+#         form = SubscribeForm()
+#     return render(request, 'includes/footer.html', {'form': form})                
+
+
+def send_newsletter(request):
+    subject = 'Your newsletter subject' # To check and add the need here.
+    message = 'Your newsletter message' # To check and add the need here.
+    from_email = settings.DEFAULT_FROM_EMAIL
+    recipients = [subscriber.email for subscriber in Subscriber.objects.all()]
+    send_mail(subject, message, from_email, recipients)
+    return redirect('home')
 
 
 API_TOKEN = str(os.getenv('MAILTRAP_API_TOKEN'))
@@ -154,21 +229,44 @@ def loginView(request):
     })
 
 
-def passwordResetView(request):
-  # Here we write view
+def password_reset_view(request):
+  if request.method == 'POST':
+    form = PasswordResetRequestForm(request.POST)
+    if form.is_valid():
+        email = form.cleaned_data['email']
+        user = CustomUser.objects.get(email=email)
+        token = default_token_generator.make_token(user)
+        reset_url = request.build_absolute_uri(reverse('password_reset_confirm', args=[user.pk, token]))
+        send_mail(
+            'Password Reset',
+            f'Click the link to reset your password: {reset_url}',
+            'xemars24@gmail.com',
+            [email],
+            fail_silently=False,
+        )
+        return HttpResponseRedirect(reverse('password_reset_done_view'))
+  else:
+    form = PasswordResetRequestForm()  
     return render(request, 'auth/password_reset.html')
 
 
-def passwordResetDoneView(request):
+def password_reset_done_view(request):
     return render(request, 'auth/password_reset_done.html')
 
 
-def passwordResetConfirmView(request):
-  # we write a view
-  return render(request, 'auth/password_reset_confirm.html')
+def password_reset_confirm_view(request, pk, token):
+  user = CustomUser.objects.get(pk=pk)
+  if default_token_generator.check_token(user, token):
+      if request.method == 'POST':
+          password = request.POST['password']
+          user.set_password(password)
+          user.save()
+          return HttpResponseRedirect(reverse('password_reset_complete_view'))
+      return render(request, 'auth/password_reset_confirm.html')
+  return HttpResponseRedirect(reverse('password_reset_invalid'))
 
 
-def passwordResetCompleteView(request):
+def password_reset_complete_view(request):
   return render(request, 'auth/password_reset_complete.html')
 
 

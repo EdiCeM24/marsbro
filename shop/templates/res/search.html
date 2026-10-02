@@ -1,0 +1,55 @@
+{% extends 'main/base.html' %}
+
+<!--  -->
+{% load static %}
+
+<!--  -->
+{% block title %} | Shopping Search {% endblock title %}
+
+<!--  -->
+{% block content %}
+<div class="search_shop_container">
+  {% if product_cats or products %}
+  <!--  -->
+  {% if product_cats %}
+  <!--  -->
+  {% for category in categories %}
+  <strong>{{ category.name }}</strong>
+  {% endfor %}
+
+  <!--  -->
+  <ul class="product_search_shop">
+    {% for product in product_cats %}
+    <div class="product_search_details">
+      <strong class="">{{ product.name }}</strong>
+      <li class="search_shop_items">
+        <img src="{{product.product_image.url}}" alt="" />
+      </li>
+      <h3>(<strike>N</strike>{{ product.price }})</h3>
+    </div>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="">No products found.</p>
+  {% endif %}
+
+  <span class="">
+    {% if products %}
+    <ul class="blog_post_search">
+      {% for post in products %}
+      <li class="blog_post_items">
+        <a href="{% url 'blog_post_detail' post.pk %}" class="blog_post_title"
+          >{{ post.topic }}</a
+        >
+        <strong class="blog_post_content"
+          >{{ post.text | truncatewords:10 }}</strong
+        >
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% else %}
+    <p class="">No results found.</p>
+  </span>
+  {% endif %}
+</div>
+{% endblock content %}

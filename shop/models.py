@@ -14,36 +14,71 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 User = settings.AUTH_USER_MODEL
 
+
 class Category(models.Model):
     name = models.CharField(max_length=255)
-    color = models.CharField(max_length=255, default='')
     slug = models.SlugField(unique=True, db_index=True)
 
-    # parent = models.ForeignKey(
-    #   'self.slug',
-    #   on_delete=models.CASCADE,
-    #   null=True,
-    #   blank=True,
-    #   related_name='children'
-    # )
+    parent = models.ForeignKey(
+      'self',
+      on_delete=models.CASCADE,
+      null=True,
+      blank=True,
+      related_name='children'
+    )
 
     class Meta:
         ordering = ['name']
         verbose_name_plural = "Categories"
 
-    # def save(self, *args, **kwargs):
-    #     if not self.slug:
-    #         self.slug = slugify(self.name)
-    #         super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+            super().save(*args, **kwargs)
+    def __str__(self):
+        return self.name
+
+
+class SubCategory(models.Model):
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.CASCADE,
+        related_name="subcategories"
+    )
+
+    name = models.CharField(max_length=150)
+    slug = models.SlugField()
+
+    class Meta:
+        unique_together = ("category", "slug")
+
+    def __str__(self):
+        return self.name  
+    
+    class Meta:
+        verbose_name_plural = "SubCategories"
 
 
 class Products(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="products"
+    )
+    subcategory = models.ForeignKey(
+        SubCategory,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="products"
+    )
     name = models.CharField(max_length=255, default='')
     product_image = models.ImageField(upload_to='upload', validators=[validationRules])
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField()
     slug = models.SlugField(max_length=255)
+    brand = models.CharField(max_length=100)
     available = models.BooleanField(default=True)
     discount = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     desc = models.TextField(max_length=255)
@@ -61,6 +96,93 @@ class Products(models.Model):
 
     def get_absolute_url(self):
         return reverse("products", kwargs=[self.id, self.slug])  # "slug":self.slug
+
+    def __str__(self):
+        return self.name
+    
+
+class Color(models.Model):
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='variants_color', blank=True, null=True)
+    name = models.CharField(max_length=50, blank=True, null=True)
+    hex_code = models.CharField(max_length=7, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Size(models.Model):
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, blank=True, null=True, related_name='variants_size')
+    name = models.CharField(max_length=30, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+    
+
+class ProductVariant(models.Model):
+
+    product = models.ForeignKey(
+        Products,
+        on_delete=models.CASCADE,
+        related_name="variants"
+    )
+
+    color = models.ForeignKey(
+        Color,
+        on_delete=models.CASCADE
+    )
+
+    size = models.ForeignKey(
+        Size,
+        on_delete=models.CASCADE
+    )
+
+    # image = models.ImageField(upload_to="pictures", blank=True, null=True)
+    sku = models.CharField(max_length=50, unique=True)
+
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    stock = models.PositiveIntegerField()
+
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.product.name} - {self.color.name} - {self.size.name}" 
+
+
+class ProductImage(models.Model):
+
+    FRONT = "front"
+    BACK = "back"
+    LEFT = "left"
+    RIGHT = "right"
+    OTHER = "other"
+
+    POSITION_CHOICES = (
+        (FRONT, "Front"),
+        (BACK, "Back"),
+        (LEFT, "Left"),
+        (RIGHT, "Right"),
+        (OTHER, "Other"),
+    )
+
+    product_variant = models.ForeignKey(
+        ProductVariant,
+        on_delete=models.CASCADE,
+        related_name="images"
+    )
+
+    image = models.ImageField(upload_to="data", validators=[validationRules])
+
+    position = models.CharField(
+        max_length=20,
+        choices=POSITION_CHOICES
+    )
+
+    is_primary = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.product_variant.product.name} - {self.position} - Image"
 
 
 class Review(models.Model):
@@ -96,6 +218,8 @@ class ReviewReport(models.Model):
      
 class Cart(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    products = models.ManyToManyField(Products, through='CartItem')
+    removed = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -113,7 +237,7 @@ class Cart(models.Model):
       ]
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items', )
     product = models.ForeignKey(Products, related_name='cart_items', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=True)
@@ -166,7 +290,7 @@ class OrderItem(models.Model):
 
 class PurchaseHistories(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    puschase_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    purschase_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     product = models.ForeignKey(Products, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)

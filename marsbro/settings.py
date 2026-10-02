@@ -14,7 +14,7 @@ import os
 
 from pathlib import Path
 
-#import dj_database_url
+# import dj_database_url
 
 from decouple import config
 
@@ -140,6 +140,14 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+    # 'default': dj_database_url.config(default='postgresql:DB_USER:DB_PASSWORD@DB_HOST:5433/DB_NAME', conn_max_age=600)
+    # {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -231,6 +239,7 @@ ANYMAIL = {
   "MAILTRAP_API_TOKEN": str(os.getenv('MAILTRAP_API_TOKEN')),
 }
 EMAIL_BACKEND = "anymail.backends.mailtrap.EmailBackend"
+EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
 DEFAULT_FROM_EMAIL = "hello@demomailtrap.co"
 
 # FOR PAYSTACK PAYMENT GATEWAY

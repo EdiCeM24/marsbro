@@ -1,0 +1,16 @@
+{% block content %}
+<div class="">
+  <h1>
+    {{ variant.product.name }} - {{ variant.size.name }} - {{ variant.color.name
+    }}
+  </h1>
+  <p class="">Stock: {{ variant.stock }}</p>
+</div>
+<ul class="">
+  {% for image in images %}
+  <li class="">
+    <img src="{{ image.image.url }}" alt="Product Image" />
+  </li>
+  {% endfor %}
+</ul>
+{% endfor content %}

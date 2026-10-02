@@ -9,6 +9,12 @@ from .models import (
     OrderItem,
     Payment,
     Wishlist,
+    SubCategory,
+    ProductImage,
+    ProductVariant,
+    PurchaseHistories,
+    Color,
+    Size
 )
 
 # removed self as 2nd parameter:
@@ -20,19 +26,72 @@ LIST_PER_PAGE = 20
 # ----------------------------
 # CATEGORY ADMIN
 # ----------------------------
-@admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'color')
+    list_display = ('name', 'slug')
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name', 'product__name', 'user__username')
     # list_filter = ('parent', 'name')
 
+admin.site.register(Category, CategoryAdmin)
+
+# ----------------------------
+# SUBCATEGORY ADMIN
+# ----------------------------
+class SubcategoryAdmin(admin.ModelAdmin):
+    list_display = ('category', 'name', 'slug')
+    prepopulated_fields = {'slug': ('name',)}
+
+admin.site.register(SubCategory, SubcategoryAdmin)
+
+
+# ----------------------------
+# PRODUCT IMAGE ADMIN
+# ----------------------------
+class ProductImageAdmin(admin.ModelAdmin):
+    list_display = ('product_variant', 'image', 'position', 'is_primary')
+
+admin.site.register(ProductImage, ProductImageAdmin)
+
+
+# ----------------------------
+# PRODUCT VARIANT ADMIN
+# ----------------------------
+class ProductVariantAdmin(admin.ModelAdmin):
+    list_display = ('product', 'color', 'size', 'sku', 'price', 'stock')
+
+admin.site.register(ProductVariant, ProductVariantAdmin)
+
+
+# ----------------------------
+# PURCHASE HISTORIES ADMIN
+# ----------------------------
+class PurchaseHistoriesAdmin(admin.ModelAdmin):
+    list_display = ('product', 'quantity', 'total_price')
+
+admin.site.register(PurchaseHistories, PurchaseHistoriesAdmin)
+
+
+# ----------------------------
+# SUBCATEGORY ADMIN
+# ----------------------------
+@admin.register(Color)
+class ColorAdmin(admin.ModelAdmin):
+    list_display = ('name', 'hex_code')
+
+
+# ----------------------------
+# SUBCATEGORY ADMIN
+# ----------------------------
+admin.site.register(Size)
+class SizeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description')
+    
 
 # ----------------------------
 # PRODUCT ADMIN
 # ----------------------------
 class ProductsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'price', 'stock', 'desc', 'available', )
+    list_display = ('owner', 'name', 'category', 'subcategory', 'price', 'brand', 'stock', 'desc', 'available', )
     list_filter = ('available', 'category')
     search_fields = ('name', 'description')
     prepopulated_fields = {'slug': ('name',)}

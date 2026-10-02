@@ -8,16 +8,25 @@ urlpatterns = [
     # ----------------------------
     path('products/', views.product_list, name='products'),
     path('product/<int:product_id>/<slug:slug>/', views.product_detail, name='product_detail'),
-    path('category/<slug:slug>/', views.category_products, name='product_category'),
+    path('category/<slug:slug>/', views.category_products, name='category_products'),
+    path('products/<product_pk>/<variants>/<variant_pk>/', views.variant_details, name='variant_details'),
+    
 
+    # ----------------------------
+    # SEARCH ROUTES
+    # ----------------------------
+    path('search/', views.search_products, name='search_products'),
+    path('post/<int:pk>/', views.blog_post_detail, name='blog_post_detail'),
+    
     # ----------------------------
     # CART ROUTES
     # ----------------------------
     path('cart/', views.cart_view, name='cart'),
     path('cart/add/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
-    path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
-    path('cart/increase/<int:product_id>/', views.increase_quantity, name='increase_quantity'),
+    path('cart/remove/<int:product_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path('increase_quantity/<int:product_id>/', views.increase_quantity, name='increase_quantity'),
     path('cart/decrease/<int:product_id>/', views.decrease_quantity, name='decrease_quantity'),
+    path('cart/add/', views.get_cart_count, name='get_cart_count'),
     # path('increment/<int:product_id>/', views.increment_quantity, name='increment_quantity'),
     # path('decrement/<int:product_id>/', views.decrement_quantity, name='decrement_quantity'),
 
@@ -54,75 +63,3 @@ urlpatterns = [
 #path('cart/update/', views.update_cart_quantity, name='update_cart_quantity'),
 
 
-# urlpatterns = [
-#   path(
-#     'products/', 
-#     views.products, 
-#     name='products'
-#   ),
-#   path(
-#     '<slug:category_slug>/',
-#     views.products, 
-#     name='product_by_category'
-#   ),
-#   path(
-#     'product/<int:pk>/<slug:slug>/',
-#     views.product_view, 
-#     name='product'
-#   ),
-#   path(
-#     'add-to-cart/<int:product_id>/', 
-#     views.add_to_cart, 
-#     name='add_to_cart'
-#   ),
-#   path(
-#     'cart/', 
-#     views.cart, 
-#     name='cart'
-#   ),
-#   path(
-#     'add-to-wishlist/<int:product_id>/',
-#     views.add_to_wihlist,
-#     name='add_to_wishlist'
-#   ),
-#   path(
-#     'increase-quantity/<int:order_item_id>/', 
-#     views.increase_quantity, 
-#     name='increase-quantity'
-#   ),
-#   path(
-#     'decrease-quantity/<int:order_item_id>/', 
-#     views.decrease_quantity, 
-#     name='decrease-quantity'
-#   ),
-#   path(
-#     'checkout/', 
-#     views.checkout, 
-#     name='checkout'
-#   ),
-#   path(
-#     'female_wears/', 
-#     views.female_wears, 
-#     name='female_wears'
-#   ),
-#   path(
-#     'men_wears/', 
-#     views.men_wears, 
-#     name='men_wears'
-#   ),
-#   path(
-#     'rate-product/', 
-#     views.rate_product, 
-#     name='rate_product'
-#   ),
-#   path(
-#     'remove-rating/', 
-#     views.remove_rating, 
-#     name='remove_rating'
-#   ),
-#   path(
-#     'report-review/', 
-#     views.report_review, 
-#     name='report_review'
-#   ),
-# ]

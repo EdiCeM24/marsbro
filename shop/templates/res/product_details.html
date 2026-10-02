@@ -1,117 +1,192 @@
-<!doctype html>
-<html lang="en">
-  {% load static %}
+{% extends 'main/base.html' %}
+<!--  -->
+{% load static %}
 
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="shortcut icon"
-      href="{% static '/images/favicon3.ico' %}"
-      type="image/x-icon"
-    />
-    <title>
-      Marsbro {% block title %} | Product Views {% endblock title %}
-    </title>
-    <link rel="stylesheet" href="{% static '/css/index.css' %}" />
-    <link rel="stylesheet" href="{% static '/scss/product_details.scss' %}" />
-  </head>
-  <body>
-    <header class="prod-header">
-      <div class="Logo">
-        <a href="{% url 'home' %}" class="myLogo">
-          <img src="{% static 'images/favicon3.ico' %}" alt="MarsBro" />
-          <span class="myLogo-text">MarsBro</span>
-        </a>
-      </div>
-    </header>
-    <div class="prod-con">
-      <div class="product_details_image">
-        <a href="{% url 'products' %}" class="">
-          <img src="{{ product.product_image.url }}" alt="" />
-        </a>
-      </div>
+<!--  -->
+Marsbro {% block title %} | Product Views {% endblock title %}
+<!--  -->
 
-      <div class="btn-cart-product">
-        <!-- <a href="{% url 'add_to_cart' product.id %}">Add To Cart</a> -->
-        <div class="product_name_desc_price">
-          <h3 class="" id="product-name">Name: {{ product.name }}</h3>
-          <strong class="">Price: ₦{{ product.price }}</strong>
-          <p class="">{{ product.desc }}</p>
-          <p class="text-xl text-green-600 mt-2">₦{{ product.get_price }}</p>
+{% block content %}
+<!--  -->
+{% if products %}
+<div class="main_product_detail_page">
+  <!-- DISPLAY VARIANTS -->
+  <div class="container_detail_page">
+    <!-- <div class="">
+      {% for variant in variants.all %}
+      <ul class="">
+        {% for variant in variants.images.all %}
+        <img src="{{ variant.image.url }}" width="150" />
+        <div class="">
+            <p>{{ variant.color.name }}</p>
+            <p>{{ variant.size.name }}</p>
+            <p>₦{{ variant.price }}</p>
+          </a>
         </div>
+        {% endfor %}
+      </ul>
 
-        <form
-          action="{% url 'add_to_cart' product.id %}"
-          id="add_to_cart_form"
-          method="POST"
-        >
-          {% csrf_token %}
-          <button type="submit" class="btn-add_to_cart">Add To Cart</button>
-        </form>
+      {% endfor %}
+    </div> -->
 
-        <div class="contact_message_links">
-          <a href="" class="contact-seller">Contact Seller</a>
-          <div class="msg-cart">
-            <p class="cart-msg" id="message">DDDDDDDd</p>
+    <div class="product-detail-items">
+      <div class="products_detail">
+        <a href="{% url 'products' %}" class="image_detail_page_link">
+          <img src="{{ products.product_image.url }}" alt="" />
+        </a>
+
+        <div class="product_detail_container">
+          <div class="product-detail_box">
+            <h3 class="product_detail_title" id="product-name">
+              {{ products.name }}
+            </h3>
+            <div class="product_detail_price">
+              <strong class="product_detail_price_tag"
+                >Price: ₦{{ products.price }}</strong
+              >
+              <strong class="product_detail_price_tag"
+                >Discount
+                <span class="product_detail_price_tag"
+                  >₦{{ products.discount }}</span
+                ></strong
+              >
+            </div>
+            <p class="product_detail_desc">{{ products.desc }}</p>
+          </div>
+          <div class="product_detail_variants">
+            {% for variant in variants %}
+            <a href="" class="product_detail_variants_link">
+              <p>
+                Color: {{ variant.color.name }} - {{ variant.color.hex_code}}
+              </p>
+              <p>Size: {{ variant.size.name }}</p>
+            </a>
+            {% endfor %}
+          </div>
+          <div class="product_detail_variants_images">
+            <!-- <p>Variants</p> -->
+            <div class="detail-variants_container">
+              <p>{{ variant.position }}</p>
+              <div class="detail_variant_contents">
+                {% for image in front_images %}
+                <span class="detail_variant">
+                  <img src="{{ image.image.url }}" alt="" />
+                  <p class="">{{ image.front_images }}</p>
+                </span>
+                {% endfor %}
+                <!--  -->
+                {% for image in back_images %}
+                <span class="detail_variant">
+                  <img src="{{ image.image.url }}" alt="" />
+                  <p class="">{{ image.back_images }}</p>
+                </span>
+                {% endfor %}
+                <!--  -->
+                {% for image in right_images %}
+                <span class="detail_variant">
+                  <img src="{{ image.image.url }}" alt="" />
+                  <p class="">{{ image.right_images }}</p>
+                </span>
+                {% endfor %}
+                <!--  -->
+                {% for image in left_images %}
+                <span class="detail_variant">
+                  <img src="{{ image.image.url }}" alt="" />
+                  <p class="">{{ image.left_images }}</p>
+                </span>
+                {% endfor %}
+                <!--  -->
+              </div>
+            </div>
+          </div>
+
+          <div class="product_detail_add_to_cart">
+            <div class="product_detail_form">
+              <form
+                action="{% url 'add_to_cart' products.id %}"
+                id="add_to_cart_form"
+                method="POST"
+              >
+                {% csrf_token %}
+                <button type="submit" class="btn-add_to_cart">
+                  Add To Cart
+                </button>
+              </form>
+
+              <div class="contact_message_links">
+                <a href="" class="contact-seller">Contact Seller</a>
+              </div>
+            </div>
+            <p class="product_detail_message" id="message"></p>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="related_products">
-      <strong class="related_product_heading">Additional Informations</strong>
-
-      <div class="related_product_display">
-        <div class="">
-          <a href="" class="related_product_image">
-            <img src="{{ product.product_image.url }}" alt="" />
+    <!-- DISPLAY LIST OF RELATED PRODUCTS HERE -->
+    <div class="related_product_container">
+      <h3>Related Products</h3>
+      <div class="related_product_contents">
+        {% for item in product %} {% endfor %}
+        <span class="related_image_container">
+          <a href="" class="related_image_link">
+            <img src="{{ item.product_image.url }}" alt="related_product" />
           </a>
-        </div>
-        <div class="related_product_details">
-          <p class="related_product_info">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. A earum
-            quae, sint corporis doloribus dolor, repellendus dicta non minima
-            numquam quisquam omnis deleniti quo doloremque itaque ullam fugiat
-            laborum. Debitis.
+        </span>
+
+        <div class="related_description_container">
+          <p class="related_description_paragraph">
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ab
+            officiis veritatis iste distinctio dolorum alias?
           </p>
+
+          <ul class="related_description_image_container">
+            <li class="related_description_image_content">
+              <img src="" alt="Image" />
+              <span class="related_product_name">your name</span>
+            </li>
+            <li class="related_description_image_content">
+              <img src="" alt="Image" />
+              <span class="related_product_name">my name</span>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
+  </div>
+  {% endif %}
 
-    <footer class="prod-footer"></footer>
+  <script>
+    document
+      .getElementById("add_to_cart_form")
+      .addEventListener("submit", (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const url = form.action;
+        const formData = new FormData(form);
 
-    <script>
-      document
-        .getElementById("add_to_cart_form")
-        .addEventListener("submit", (e) => {
-          e.preventDefault();
-          const form = e.target;
-          const url = form.action;
-          const formData = new FormData(form);
+        const productName = document.getElementById("product-name").textContent;
 
-          const productName = document.getElementById("product-name");
-
-          fetch(url, {
-            method: "POST",
-            headers: {
-              "X-CSRFToken": formData.get("csrfmiddlewaretoken"),
-            },
-            body: formData,
+        fetch(url, {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": formData.get("csrfmiddlewaretoken"),
+          },
+          body: formData,
+        })
+          .then((Response) => Response.json())
+          .then((data) => {
+            const messageElement = document.getElementById("message");
+            if (data.success) {
+              messageElement.textContent = data.message;
+            } else {
+              message.textContent = `Failed to add ${productName} to cart.`;
+            }
           })
-            .then((Response) => Response.json())
-            .then((data) => {
-              const messageElement = document.getElementById("message");
-              if (data.success) {
-                messageElement.textContent = data.message;
-              } else {
-                message.textContent = `Failed to add ${productName} to cart.`;
-              }
-            })
-            .catch((err) => {
-              console.error("Error in fetching data: ", err);
-            });
-        });
-    </script>
-  </body>
-</html>
+          .catch((err) => {
+            console.error("Error in fetching data: ", err);
+          });
+      });
+  </script>
+  {% endblock content %}
+</div>

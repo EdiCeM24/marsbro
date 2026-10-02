@@ -1,0 +1,13 @@
+{% block content %}
+<!--  -->
+{% if category %}
+<!--  -->
+{% for category in categories %}
+<div class="">
+  <p>{{ category.name }}</p>
+</div>
+{% endfor %}
+<!--  -->
+{% endif %}
+<!--  -->
+{% endblock content %}

@@ -75,16 +75,25 @@
     </div>
 
     <span class="foot_subscribe">
-      <form action="" method="post" class="subscribe-form">
+      <form action="" method="POST" class="subscribe-form">
         {% csrf_token %}
         <input
-          type="text"
+          type="email"
           name="subscribe"
           id="subscribe-input"
           placeholder="Subscribe for free with email"
         />
+        <!-- <span class="subscribe-input"> {{ form.email }} </span> -->
         <button type="submit" class="btn bg-teal-700">Subscribe</button>
       </form>
+
+      {% if messages %}
+      <ul class="">
+        {% for message in messages %}
+        <li class="">{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
     </span>
   </div>
 </div>

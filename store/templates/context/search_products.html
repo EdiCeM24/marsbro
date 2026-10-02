@@ -1,0 +1,24 @@
+{% extends 'main/base.html' %}
+
+<!--  -->
+{% load static %}
+
+<!--  -->
+{% block title %} | Studies Search {% endblock title %}
+
+<!--  -->
+{% block content %}
+<div class="search_shop_container">
+  {% if products %}
+
+  <!--  -->
+  <ul class="product_search_shop">
+    {% for product in products %}
+    <li class="search_shop_items">{{ product.topic }} ({{ product.text }})</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="">No products found.</p>
+  {% endif %}
+</div>
+{% endblock content %}

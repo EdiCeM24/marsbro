@@ -2,7 +2,7 @@
 <p></p>
 {% load static %} {% block title %} | Checkout {% endblock title %}
 <header></header>
-{% block content %}
+{% block content %} <a href="{% url 'checkout' %}">Checkout</a>
 
 <div class="checkout-container">
   <form action="" class="form" method="POST">

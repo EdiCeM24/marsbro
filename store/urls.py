@@ -39,23 +39,34 @@ urlpatterns = [
     name='logout'
   ),
   path(
+    'subscribe/',
+    views.subscribe,
+    name='subscribe'
+  ),
+  path(
+    'send-newsletter/',
+    views.send_newsletter,
+    name='send_newsletter'
+  ),
+  path(
     'password_reset/',
-    views.passwordResetView,
+    views.password_reset_view,
     name='password_reset'
   ),
   path(
     'password_reset/done/',
-    views.passwordResetDoneView,
+    views.password_reset_done_view,
     name='password_reset_done'
   ),
+  # <uidb64> below:
   path(
-    'reset/<uidb64>/<token>/',
-    views.passwordResetConfirmView,
+    'reset/<int:pk>/<str:token>/',
+    views.password_reset_confirm_view,
     name='password_reset_confirm'
   ),
   path(
-    'reset/done/',
-    views.passwordResetCompleteView,
+    'password_reset/complete/',
+    views.password_reset_complete_view,
     name='password_reset_complete'
   ),
   path(

@@ -1,148 +1,172 @@
-<!DOCTYPE html>
-
-{% load static %}
+<!doctype html>
 
 {% load cart_tags %}
 
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cart</title>
-  <link rel="stylesheet" href="{% static 'css/index.css' %}">
-  <link rel="stylesheet" href="{% static 'scss/cart.scss' %}">
-</head>
-<body>
-  {% block content %}
-    <div class="carts">
-      <a href="{% url 'products' %}">Product page</a>
-      <!-- CART PAGE -->
+  {% load static %}
+  <!--  -->
 
-      <h1 class="text-2xl font-bold mb-4">Your Cart</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MarsBro | Cart</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+  </head>
+  <body>
+    {% block content %}
+    <header class="header">
+      <a href="" class="myLogo">
+        <img src="{% static 'images/favicon3.ico' %}" alt="" />
+        <span class="">MarsBro</span>
+      </a>
+      <div class="cart_product_link">
+        <a href="{% url 'products' %}">Product page</a>
+      </div>
+    </header>
+    <div class="carts">
+      <div class="cart-urs">
+        <!-- CART PAGE -->
+        <h1 class="text-2xl font-bold mb-4">Your Cart</h1>
+      </div>
 
       {% if cart_items.items.all %}
-      <table class="w-full bg-white rounded-xl shadow">
-        <thead>
-          <tr class="text-left">
-            <th class="p-3">Product</th>
-            <th>Name</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in cart_items.items.all %}
-          <tr class="border-t">
-            <td class="cart_product_image"><img src="{{ item.product.product_image.url }}" alt=""></td>
+      <div class="cart_container">
+        {% for item in cart_items.items.all %}
+        <div class="cart_images">
+          <h3>Product</h3>
+          <span class="cart_product_image">
+            <img src="{{ item.product.product_image.url }}" alt="" />
+          </span>
+        </div>
+
+        <div class="cart_product_name_quantity">
+          <div class="cart_product_name">
+            <h3>Name</h3>
             <td class="p-3">{{ item.product.name }}</td>
-            <td class="decrease_increase_quantity_btn">
+          </div>
+          <div class="cart_product_quantity">
+            <h3>Quantity</h3>
+            <span
+              class="decrease_increase_quantity_btn"
+              id="quantity-{{ product.id }}"
+            >
               {{ item.quantity }}
-              <form id="cart-item" action="{% url 'decrease_quantity' item.product_id%}" method="GET">
-                 {% csrf_token %}
+            </span>
+          </div>
+        </div>
+
+        <div class="">
+          <div class="">
+            <h3>Price</h3>
+            <strong class="">₦{{ item.total_price }}</strong>
+          </div>
+
+          <div class="">
+            <h3>Action</h3>
+            <div class="">
+              <form
+                id="cart-item"
+                action="{% url 'decrease_quantity' item.product_id%}"
+                method="GET"
+              >
+                {% csrf_token %}
                 <button type="button" class="decrement_btn" id="">-</button>
-              </form><!--increase_quantity-->
-              <form id="cart-item" action="{% url 'increase_quantity' item.product_id %}" method="GET">
+              </form>
+              <!--increase_quantity-->
+              <form
+                id="cart-item"
+                action="{% url 'increase_quantity' item.product_id %}"
+                method="GET"
+              >
                 {% csrf_token %}
                 <button type="button" class="" id="">+</button>
               </form>
-            </td>
-            <td>₦{{ item.total_price }}</td>  <!--item.get_total_price-->
-            <td>
-              <a href="{% url 'remove_from_cart' item.id %}" class="text-red-500"><i class="fa fa-trash" aria-hidden="true"></i>Remove</a>  <!--It was remove_from_cart item.id-->
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+              <button onclick="increaseQuantity('{{ product.id }}')">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <div class="mt-4 flex justify-between">
-        <h2 class="text-xl font-bold">Total: ₦{{ item.total_price.get_total_price }}</h2>  <!--cart.get_total-->
-        <a href="{% url 'checkout' %}" class="">Place Order</a>
+      <!--item.get_total_price-->
+
+      <button id="remove-cart-item">Remove</button>
+      <a
+        href="{% url 'remove_from_cart' item.product_id %}"
+        class="text-red-500"
+        ><i class="fa fa-trash" aria-hidden="true"></i>Remove</a
+      >
+      <!--It was remove_from_cart item.id-->
+
+      <div class="">
+        <div class="mt-4 flex justify-between">
+          <h2 class="text-xl font-bold">
+            Total: ₦{{ item.total_price.get_total_price }}
+          </h2>
+          <!--cart.get_total-->
+          <a href="{% url 'checkout' %}" class="">Place Order</a>
+        </div>
+        {% endfor %}
       </div>
       {% else %}
       <p>Your cart is empty</p>
-      {% endif %}
-
-
     </div>
+    {% endif %}
+    <!--  -->
+    {% endblock content %}
 
-
-
-
-
-    <!===== UPDATED CART HTML AND JS =======
-    <!-- cart.html -->
-    {% for item in cart.items.all %}
-    <div class="cart-item" data-id="{{ item.product.id }}">
-      
-      <h4>{{ item.product.name }}</h4>
-
-      <div class="quantity-box">
-        <button class="decrease">−</button>
-
-        <span class="qty">{{ item.quantity }}</span>
-
-        <button class="increase">+</button>
-      </div>
-
-      <p>₦<span class="item-total">{{ item.total_price }}</span></p>
-
-    </div>
-    {% endfor %}
-
-    <h3>Total: ₦<span id="cart-total">{{ cart.total_price }}</span></h3>
-    ⚡ 4. AJAX (Smooth UX, No Reload)
     <script>
-    document.querySelectorAll('.cart-item').forEach(item => {
+      document.querySelectorAll(".cart-item").forEach((item) => {
         const productId = item.dataset.id;
 
-        item.querySelector('.increase').addEventListener('click', () => {
-            updateCart(productId, 'increase', item);
+        item.querySelector(".increase").addEventListener("click", () => {
+          updateCart(productId, "increase", item);
         });
 
-        item.querySelector('.decrease').addEventListener('click', () => {
-            updateCart(productId, 'decrease', item);
+        item.querySelector(".decrease").addEventListener("click", () => {
+          updateCart(productId, "decrease", item);
         });
-    });
+      });
 
-    function updateCart(productId, action, element) {
-        fetch('/cart/update/', {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}',
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: `product_id=${productId}&action=${action}`
+      function updateCart(productId, action, element) {
+        fetch("/cart/update/", {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `product_id=${productId}&action=${action}`,
         })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status === 'updated') {
-                element.querySelector('.qty').innerText = data.quantity;
-                element.querySelector('.item-total').innerText = data.item_total;
-                document.getElementById('cart-total').innerText = data.cart_total;
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status === "updated") {
+              element.querySelector(".qty").innerText = data.quantity;
+              element.querySelector(".item-total").innerText = data.item_total;
+              document.getElementById("cart-total").innerText = data.cart_total;
             }
 
-            if (data.status === 'removed') {
-                element.remove();
-                document.getElementById('cart-total').innerText = data.cart_total;
+            if (data.status === "removed") {
+              element.remove();
+              document.getElementById("cart-total").innerText = data.cart_total;
             }
-        });
-    }
+          });
+      }
+
+      //
+      function increaseQuantity(productId) {
+        console.log(productId);
+        fetch(`/increase_quantity/${productId}/`, {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById(`quantity-${productId}`).textContent =
+              data.quantity;
+            document.getElementById(`cart-count`).textContent = data.cart_count;
+          });
+      }
     </script>
-
-
-
-    <!========== BETTER UX, Replace raw buttons with styled UI ==========
-    <div class="quantity-box">
-      <button class="decrease">−</button>
-      <span class="qty">{{ item.quantity }}</span>
-      <button class="increase">+</button>
-    </div>
-
-    {% endblock content %}
-</body>
+  </body>
 </html>
-
-
-

@@ -1,0 +1,109 @@
+{% if product %}
+<div class="prod-details">
+  {% for product in product %}
+  <div class="product_details_image">
+    <a href="{% url 'products' %}" class="">
+      <img src="{{ product.product_image.url }}" alt="" />
+    </a>
+  </div>
+  {% endfor %}
+
+  <div class="btn-cart-product">
+    <!-- <a href="{% url 'add_to_cart' product.id %}">Add To Cart</a> -->
+    <div class="product_name_desc_price">
+      <div class="">
+        <!--AI CHATGPT-->
+        {% for product in products %}
+        <h2>{{ product.name }}</h2>
+
+        {% for variant in product.variants.all %}
+        <p>{{ variant.color.name }}</p>
+        <p>{{ variant.size.name }}</p>
+        <p>${{ variant.price }}</p>
+
+        {% for image in variant.images.all %}
+        <!-- <img src="{{ image.image.url }}" width="150" /> -->
+        {% endfor %} {% endfor %} {% endfor %}
+      </div>
+      <!-- <h3 class="" id="product-name">Name: {{ product.name }}</h3>
+          <strong class="">Price: ₦{{ product.price }}</strong>
+          <p class="">{{ product.desc }}</p>
+          <p class="text-xl text-green-600 mt-2">₦{{ product.get_price }}</p> -->
+    </div>
+
+    <form
+      action="{% url 'add_to_cart' product.id %}"
+      id="add_to_cart_form"
+      method="POST"
+    >
+      {% csrf_token %}
+      <button type="submit" class="btn-add_to_cart">Add To Cart</button>
+    </form>
+
+    <div class="contact_message_links">
+      <a href="" class="contact-seller">Contact Seller</a>
+      <div class="msg-cart">
+        <p class="cart-msg" id="message">DDDDDDDd</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!---ADDITIONAL INFORMATIONS--->
+<div class="related_products">
+  <strong class="related_product_heading">Additional Informations</strong>
+
+  <div class="related_product_display">
+    <div class="">
+      <a href="" class="related_product_image">
+        <img src="{{ product.product_image.url }}" alt="" />
+      </a>
+    </div>
+    <div class="related_product_details">
+      <p class="related_product_info">
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. A earum quae,
+        sint corporis doloribus dolor, repellendus dicta non minima numquam
+        quisquam omnis deleniti quo doloremque itaque ullam fugiat laborum.
+        Debitis.
+      </p>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- Took from anchor tag of variants in product details page: -->
+{% url 'variant' product.pk variant.pk %} from Cart page
+<!===== UPDATED CART HTML AND JS =======
+    <!-- cart.html -->
+{% for item in cart.items.all %}
+<div class="cart-item" data-id="{{ item.product.id }}">
+  <h4>{{ item.product.name }}</h4>
+
+  <div class="quantity-box">
+    <button class="decrease">−</button>
+
+    <span class="qty">{{ item.quantity }}</span>
+
+    <button class="increase">+</button>
+  </div>
+
+  <p>₦<span class="item-total">{{ item.total_price }}</span></p>
+</div>
+{% endfor %}
+
+
+ <!========== BETTER UX, Replace raw buttons with styled UI ==========
+    <div class="quantity-box">
+      <button class="decrease">−</button>
+      <span class="qty">{{ item.quantity }}</span>
+      <button class="increase">+</button>
+    </div>
+
+
+ <h3>Total: ₦<span id="cart-total">{{ cart.total_price }}</span></h3>
+  <!-- ⚡ 4. AJAX (Smooth UX, No Reload) -->    
+
+
+
+ 
+

@@ -1,57 +1,63 @@
-{% extends 'main/base.html' %} {% load static %} {% block title %} | Shopping
-Page {% endblock title %} | Shopping {% block content %}
+{% extends 'main/base.html' %}
+<!--  -->
+{% load static %}
+<!--  -->
+{% block title %} | Shopping Page {% endblock title %}
+<!--  -->
+{% block content %}
 <div class="product-container">
   <div class="product-headings">
-    <a href="{% url 'checkout' %}">Checkout</a>
-    <strong class="prod-headings"
-      >Lorem ipsum dolor sit amet consectetur.</strong
-    >
-    <p>
-      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde aliquid
-      iusto saepe ipsa maiores nemo sint nobis incidunt recusandae dolorum,
-      doloremque laborum, est dolore ea.
-    </p>
+    <strong class="prod-headings">Biggest Sale of the Year: Shop Now.</strong>
+    <div class="product-text-content">
+      <img src="{% static '/images/bg-color-3.jpg' %}" alt="Photo-bg" />
+      <p class="product-text">
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde aliquid
+        iusto saepe ipsa maiores nemo sint nobis incidunt recusandae dolorum,
+        doloremque laborum, est dolore ea.
+      </p>
+    </div>
   </div>
 
+  {% include 'includes/category.html' %}
+  <!--  -->
   {% load rating_stars %}
-
+  <!--  -->
+  {% if categories %}
   <div class="select-products">
     <select name="" id="" class="cat">
       <option value="">Categories</option>
       {% for category in categories %}
       <option value="" id="">
-        <a href="{% url 'product_by_category' category.slug %}"
+        <a href="{% url 'category_products' category.slug %}"
           >{{ category.name }}</a
         >
       </option>
       {% endfor %}
     </select>
 
+    <!-- SORTING -->
     <select name="" id="" class="cat">
-      <option value="">Colors</option>
-      {% for category in categories %}
+      <option value="">Sorts</option>
+      {% for product in products %}
+
       <option value="" id="">
-        <a href="{% url 'product_by_category' category.slug %}"
-          >{{ category.color }}</a
+        <a href="{% url 'category_products' product.slug %}"
+          >{{ product.name }} - ₦{{ product.price }}</a
         >
       </option>
       {% endfor %}
     </select>
   </div>
 
-  <div class="">
-    {% if category %}
-    <h2>Category: {{ category.name }}</h2>
-    {% else %}
-    <strong>All Products:</strong>
-    {% endif %}
-  </div>
+  {% endif %}
 
   <div class="products-list">
-    <div class="prod-bg"></div>
+    <div class="prod-bg">
+      <p></p>
+    </div>
 
     <div class="prod-views">
-      {% for product in products %}
+      {% for product in page_obj %}
       <div class="prod-conn">
         <div class="product-img">
           {% if product.product_image %}
@@ -83,6 +89,7 @@ Page {% endblock title %} | Shopping {% block content %}
 
         <p class="product-desc">{{ product.desc | truncatewords:15}}</p>
         <div class="product_rating_tag">
+          <!--I'm to take this line to product details: -->
           <p class="">Available: {{ product.available }}</p>
 
           <p class="ratings">
@@ -133,6 +140,28 @@ Page {% endblock title %} | Shopping {% block content %}
       </div>
       {% endfor %}
     </div>
+  </div>
+
+  <div class="pagination">
+    <span class="step-links">
+      {% if page_obj.has_previous %}
+      <a href="?page=1" class="page_prev">&laquo; </a>
+      <a href="?page={{ page_obj.previous_page_number }}" class="page_prev"
+        >Prev:</a
+      >
+      {% endif %}
+
+      <span class="current">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+      </span>
+
+      {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}" class="page_next">next</a>
+      <a href="?page={{ page_obj.paginator.num_pages }}" class="page_next"
+        >&raquo;</a
+      >
+      {% endif %}
+    </span>
   </div>
 
   <script>

@@ -11,21 +11,42 @@
 
     <div class="mobile_sidebar" id="header-mobile">
       <div class="navbar-search">
-        <form action="" method="get" class="search-form">
+        <form
+          action="{% url 'search_products' %}"
+          method="get"
+          class="search-form"
+        >
           {% csrf_token %}
-          <input type="text" placeholder="Search..." id="searchInput" />
-          <img src="{% static 'images/search-icon.png' %}" alt="" />
+          <input
+            type="search"
+            name="q"
+            placeholder="Search..."
+            id="searchInput"
+          />
+          <button type="submit" class="search-btn">
+            <img src="{% static 'images/search-icon.png' %}" alt="" />
+          </button>
         </form>
       </div>
 
       <div class="header_middle_links">
         <div class="nav-parmalinks" id="parma-links">
-          <a href="{% url 'about' %}">About</a>
           <a href="{% url 'products' %}">🛍️ Shopping</a>
-          <a href="{% url 'contact' %}">Contact</a>
-          <a href="{% url 'wishlist' %}" class="hover:text-blue-500"
-            >Wishlist</a
+          <button
+            class="resources-links"
+            id="perma-btn"
+            style="font-size: 24px; font-weight: 600"
           >
+            Resources
+          </button>
+
+          <span class="menu-nav-links" id="perma-links">
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'contact' %}">Contact</a>
+            <a href="{% url 'wishlist' %}" class="hover:text-blue-500"
+              >Wishlist</a
+            >
+          </span>
         </div>
         <!-- <a href="" class="text-xl font-bold">🛍️ Store</a> -->
       </div>
@@ -34,9 +55,12 @@
 
       <div class="auth">
         {% if user.is_authenticated %}
-        <a href="{% url 'login' %}" class="login-btn">Login</a>
+        <a href="{% url 'account_logout' %}">Logout</a>
         {% else %}
-        <a href="{% url 'register' %}" class="register">Register</a>
+        <div class="auth-reg-login">
+          <a href="{% url 'login' %}" class="login-btn">Login</a>
+          <a href="{% url 'register' %}" class="register">Register</a>
+        </div>
         {% endif %}
       </div>
     </div>
@@ -49,7 +73,7 @@
       <div class="cart_profile">
         <div class="cart-icon">
           <a href="{% url 'cart' %}" class="cart">
-            <span class="quantity-update" id="productUpdate">0</span>
+            <span class="quantity-update" id="cart-count">0</span>
             <img id="" src="{% static 'images/cart.png' %}" alt="" />
             <!-- <i class="fa fa-cart"></i> -->
           </a>
@@ -84,9 +108,9 @@
 </script>
 
 {% if user.is_authenticated %}
-<a href="{% url 'account_logout' %}">Logout</a>
-{% else %}
 <a href="{% url 'account_login' %}">Login</a>
+{% else %}
+<a href="{% url 'account_logout' %}">Logout</a>
 {% endif %}
 
 <script>
@@ -101,5 +125,65 @@
       headerMobileEl.classList.remove("show");
       headerMobileEl.classList.add("hidden");
     }
+  });
+
+  // Nested menu navbar
+  const permaBtn = document.querySelector("#perma-btn");
+  const permaLinks = document.querySelector("#perma-links");
+  const permaMultiLinks = document.querySelectorAll("#perma-links a");
+
+  permaBtn.addEventListener("click", dropmenu);
+
+  function dropmenu() {
+    if (permaLinks) {
+      permaLinks.classList.toggle("show-nav-menu");
+    }
+  }
+
+  permaMultiLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      permaLinks.classList.remove("show-nav-menu");
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!permaBtn.contains(e.target) && !permaLinks.contains(e.target)) {
+      permaLinks.classList.remove("show-nav-menu");
+    }
+  });
+
+  // CART COUNT
+  const cartCountEl = document.getElementById("cart-count");
+
+  function updateCartCount(count) {
+    cartCountEl.textContent = count;
+  }
+
+  // Call this function when a product is added to cart
+  function addToCart(productId) {
+    // Your add to cart logic here
+    (console.log(productId),
+      fetch(`/cart/add/${productId}`, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": "{{ csrf_token }}",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          updateCartCount(data.cart_count);
+        }));
+  }
+
+  //
+  document.addEventListener("DOMContentLoaded", () => {
+    fetch(`/cart/add/`, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        updateCartCount(data.cart_count);
+      });
+    console.log(`/cart/add/`);
   });
 </script>
